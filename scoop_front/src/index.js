@@ -11,7 +11,7 @@ import { ChatPage } from './component/ChatPage';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-  <Connector/>
+  <Connector>
   <Routes>
     <Route path="/" element={<Main />}>
     <Route path="/channel/:id" element={
@@ -20,7 +20,9 @@ root.render(
     </Route>
     </Route>
   </Routes>
+  </Connector>
   </BrowserRouter>
+  
 );
 
 // If you want to start measuring performance in your app, pass a function
