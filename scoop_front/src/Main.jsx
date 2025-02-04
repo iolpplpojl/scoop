@@ -1,0 +1,19 @@
+import { useEffect, useState } from "react";
+import { ClickContainer } from "./component/ClickContainer";
+import "./Main.css"
+import { Outlet } from 'react-router-dom';
+import { Sidebar } from "./tool/Sidebar";
+
+function Main() {
+   const [init, setInit]  = useState(false);
+
+    return (
+      <div className="App">
+        <Sidebar></Sidebar>
+        <Outlet/>
+      </div>
+    );
+  }
+  
+  export default Main;
+  

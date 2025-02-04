@@ -1,0 +1,86 @@
+.AppMain {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+
+  }
+  
+.scroll{
+  height: 100vh;
+  overflow: auto; /* 스크롤 가능하게 */
+  -ms-overflow-style: none; /* IE, Edge */
+  overflow-x: hidden;
+}
+.OutputChat{
+  flex:1;
+
+}
+.InputChat{
+  margin: 0;
+  padding: 0;
+  height : 4rem;
+  background-color: #586275;
+}
+.OutputChat ul{
+  width: 100%;
+  height: 95%;
+  display: flex;
+  flex-direction: column-reverse;
+  list-style: none;
+  text-align: left;
+}
+
+.InputChat input{
+  width: 90%;
+  height: 100%;
+  border: none;
+  background-color: #ffffff00;
+  color : #d6d6d6;
+}
+#Sidebar{
+  flex-direction: column;
+  min-height: 0;
+  width: 240px;
+  flex: 0 0 auto;
+  background: var(--background-secondary);
+}
+.Channel{
+  display: flex;
+  flex-direction: column;
+  color: #979ba3;
+  background-color: #535353;
+  width: calc(100%  );
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.App{
+  background-color: #282c34;
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+}
+.ClickCont{
+  background-color: #373d47;
+  width: 200px;
+  padding: 0.3rem 0.3rem 0.3rem 0.3rem;
+}
+.ClickCont a{
+  color: #979ba3;
+  display: block;
+  width: 100%;
+  text-decoration: none; 
+  text-align: left;
+}
+.ClickCont a:hover {
+  background-color: #00000013; /* 마우스를 갖다 댔을 때 배경색 변화 */
+}
