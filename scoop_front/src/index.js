@@ -8,12 +8,15 @@ import { Connector } from './Connector';
 import "react-router-dom";
 import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import { ChatPage } from './component/ChatPage';
+import { Login } from './login';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <Connector>
   <Routes>
+    <Route path="/login" element={<Login></Login>}></Route>
     <Route path="/" element={<Main />}>
+    <Route path="/channel/"></Route>
     <Route path="/channel/:id" element={
         <ChatPage></ChatPage>
     }>  

@@ -6,7 +6,6 @@ import { useWebSocket } from "../Connector";
 
 export function ChatPage(props){
     const {id} = useParams();
-    const text = useWebSocket();
     return(
         <div class="Channel">
         <div class="OutputChat">
@@ -14,7 +13,7 @@ export function ChatPage(props){
                 <li>This is a Sample. a </li>
                 <li>This is a Sample. a </li>
                 <li>{id} is channel number;</li>
-                <li>{text}</li>
+                <li> z</li>
             </ul>
          </div>
          <div class="InputChat">
