@@ -76,8 +76,6 @@ export function Connector({children}){
                                     localStorage.setItem('logintoken', token);
                                     console.log("엑세스 재발급 완료." + token);
                             }).catch((err) => { 
-
-                                    alert('로그인에 오류가 발생했습니다, 다시 로그인.')
                                     localStorage.removeItem('reftoken');
                                     localStorage.removeItem('logintoken');
                                     nav("/login");
