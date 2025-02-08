@@ -30,7 +30,7 @@ public class Service implements UserDetailsService{
  }
  
  @Autowired
- public Service(MemberRepo rep, 	JwtUtil jw) {
+ public Service(MemberRepo rep, JwtUtil jw) {
 
 	 repo = rep;
 	 jwt = jw;
@@ -45,6 +45,13 @@ public UserDetails loadUserByUsername(String username) throws UsernameNotFoundEx
 }
 
 public String genAccessToken(MemberRes mem) {
-	 return jwt.genAccessToken(mem);
+	 return jwt.genAccesToken(mem.getUserId());
 }	
+public String genRefreshToken(MemberRes mem) {
+	return jwt.genRefreshToken(mem);
+}
+
+public boolean Verify(String token) {
+	return jwt.validateToken(token);
+}
 }
