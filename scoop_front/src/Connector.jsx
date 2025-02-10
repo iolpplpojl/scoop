@@ -44,7 +44,10 @@ export function Connector({children}){
         }
 
         soc.onmessage = () => {
-
+            soc.send(JSON.stringify({
+                "type" : "NOPE  ",
+                "writer" : "admin",
+            }))
         }
     }
 

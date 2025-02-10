@@ -76,7 +76,7 @@ public class RESTAPI {
 			if(serv.Verify(ref != null ? ref.getValue() : ""))
 			{
 		        return ResponseEntity.ok()
-		                .header(HttpHeaders.AUTHORIZATION, "Bearer " + serv.genAccessToken(serv.loadMemberByUserId(serv.extractSub(ref))))
+		                .header(HttpHeaders.AUTHORIZATION, "Bearer " + serv.genAccessToken(serv.loadMemberByUserId(serv.extractSub(ref))))	
 		                .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")  // 캐시 무효화
 		                .header(HttpHeaders.PRAGMA, "no-cache")
 		                .header(HttpHeaders.EXPIRES, "0")

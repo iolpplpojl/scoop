@@ -38,10 +38,6 @@ public class SocketHandler implements WebSocketHandler {
 			System.out.println(String.format("%s 유저가 입장헀습니다." , jn.get("writer")));
 			break;
 		}
-
-		TestMessage m = mapper.readValue(message.getPayload().toString(), TestMessage.class);
-		System.out.println(m);
-		System.out.println(m.getText());
 	}
 
 	@Override
