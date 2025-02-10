@@ -1,5 +1,7 @@
 package com.scoop.bak.Controller;
 
+import java.awt.geom.CubicCurve2D;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,9 @@ import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.service.Service;
 
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 //
 @RequestMapping("/api")
@@ -31,7 +36,7 @@ public class RESTAPI {
 	
 
 	@GetMapping("/login")
-	public ResponseEntity<?> login(@RequestParam("id") String id, @RequestParam("pwd") String pwd) {
+	public ResponseEntity<?> login(@RequestParam("id") String id, @RequestParam("pwd") String pwd, HttpServletResponse res) {
 		System.out.println("id");
 		MemberRes mem = serv.loadMemberByUserId(id);
 		if(mem == null) {
@@ -41,6 +46,8 @@ public class RESTAPI {
 		if(mem.getUserPwd().equals(pwd) )
 		{
 			System.out.println(mem.getUserId() + "의 로그인 처리 됨");
+			res.addCookie(serv.createCookie(mem));
+
 	        return ResponseEntity.ok()
 	                .header(HttpHeaders.AUTHORIZATION, "Bearer " + serv.genRefreshToken(mem))
 	                .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")  // 캐시 무효화
@@ -51,12 +58,25 @@ public class RESTAPI {
 		return ResponseEntity.badRequest().body("로그인 처리 실패");
 	}
 	@GetMapping("/RefreshAccess") //엑서스토큰 갱신
-	public ResponseEntity<?> Refresh(@RequestParam("key") String token, @RequestParam("id") String id)
-	{ 
-			if(serv.Verify(token))
+	public ResponseEntity<?> Refresh(HttpServletRequest req)
+	{
+		Cookie[] coo = req.getCookies();
+		
+		Cookie ref = null;
+		for(Cookie c : coo) {
+			if(c.getName().equals("ref")) {
+				ref = c;
+				break;
+			}
+			System.out.println(c.getName());
+			System.out.println(c.getValue());
+			System.out.println(c.getAttributes());
+		}
+		
+			if(serv.Verify(ref != null ? ref.getValue() : ""))
 			{
 		        return ResponseEntity.ok()
-		                .header(HttpHeaders.AUTHORIZATION, "Bearer " + serv.genAccessToken(serv.loadMemberByUserId(id)))
+		                .header(HttpHeaders.AUTHORIZATION, "Bearer " + serv.genAccessToken(serv.loadMemberByUserId(serv.extractSub(ref))))
 		                .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")  // 캐시 무효화
 		                .header(HttpHeaders.PRAGMA, "no-cache")
 		                .header(HttpHeaders.EXPIRES, "0")

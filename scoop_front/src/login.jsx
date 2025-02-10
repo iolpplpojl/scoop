@@ -19,15 +19,17 @@ export function Login(props){
         console.log(id);
         console.log(pwd);
         console.log("doLogin");
-        axios("http://192.168.0.82:9999/api/login", {
+        axios("https://192.168.0.82:9999/api/login", {
             method : "get",
             params : {
                 id: id,
                 pwd : pwd
             },
+            credentials: "include", // 💡 HTTP-Only 쿠키 포함 요청
             withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
 
         }).then((res) => {
+                
                 console.log(res);
                 const token = res.headers['authorization'].split(' ')[1];
                 localStorage.setItem('reftoken', token);
@@ -52,3 +54,5 @@ export function Login(props){
         </div>
     )
 }   
+
+

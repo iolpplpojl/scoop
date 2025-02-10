@@ -7,7 +7,6 @@ import { useWebSocket } from "./Connector";
 
 function Main() {
    const [init, setInit]  = useState(false);
-  const isLoggedin = useWebSocket();
     return (
       <div className="App">
         <Sidebar></Sidebar>

@@ -18,6 +18,7 @@ import com.scoop.bak.classes.MemberResDetails;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.Cookie;
 
 @org.springframework.stereotype.Service
 public class Service implements UserDetailsService{
@@ -28,6 +29,7 @@ public class Service implements UserDetailsService{
 	 MemberRes mem  = repo.findByUserId(i).orElse(null);
 	 return mem;
  }
+ 
  
  @Autowired
  public Service(MemberRepo rep, JwtUtil jw) {
@@ -44,6 +46,20 @@ public UserDetails loadUserByUsername(String username) throws UsernameNotFoundEx
 	return new MemberResDetails(mem);
 }
 
+public Cookie createCookie(MemberRes mem) {
+	Cookie coo = new Cookie("ref", genRefreshToken(mem));
+	coo.setHttpOnly(true);
+	coo.setSecure(true);
+	coo.setPath("/");
+	coo.setMaxAge(60*60*24*30);
+	coo.setAttribute("SameSite", "None");
+	return coo;
+	
+}
+
+public String extractSub(Cookie coo) {
+	return jwt.extractSub(coo.getValue());
+}
 public String genAccessToken(MemberRes mem) {
 	 return jwt.genAccesToken(mem.getUserId());
 }	

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.scoop.bak.classes.MemberRes;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -75,7 +76,23 @@ public class JwtUtil {
             return false;
         }
     }
-    
+    public String extractSub(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)  // 서명 검증을 위한 키 설정
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();  // Claims 객체 (페이로드 부분)
+
+            return claims.getSubject();  // "sub" 클레임 값 반환
+        } catch (SignatureException e) {
+            // 서명 오류 처리 (서명 키가 맞지 않거나 변조된 경우)
+            throw new RuntimeException("Invalid JWT signature", e);
+        } catch (Exception e) {
+            // JWT 파싱 오류 처리
+            throw new RuntimeException("Failed to parse JWT token", e);
+        }
+    }
     //엑세스 토큰 생성
     public String genAccesToken(String id) {
         Map<String, Object> claims = new HashMap<>();
