@@ -32,7 +32,6 @@ export function Login(props){
                 
                 console.log(res);
                 const token = res.headers['authorization'].split(' ')[1];
-                localStorage.setItem('reftoken', token);
                 console.log(token);
                 nav("/");
         }).catch((err) => {

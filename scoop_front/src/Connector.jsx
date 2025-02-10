@@ -4,12 +4,19 @@ import {jwtDecode} from "jwt-decode";
 import axios from "axios";
 
 export const Context = createContext(null);
-
 export function Connector({children}){
     const nav = useNavigate();
-    const [accessToken, setAccessToken] = useState(null);    
+    const [messageQueue, setMessageQueue] = useState(null);
+    const [accessToken, setAccessToken] = useState();    
             useEffect(() => {
-
+                verifyLogin().then
+                ((result) =>
+                {
+                    if(result == true){                    
+                        console.log("ConnectWS");
+                        ConnectWs();    
+                    }
+                });
         console.log("Connecting..." + Math.random());
 
     },[] )
@@ -17,10 +24,7 @@ export function Connector({children}){
     // /login이 아닐때 페이지 이동마다 로그인 검증
     useEffect(()=>{
         if(loc.pathname !="/login"){
-        if(verifyLogin() == true){
-            console.log("ConnectWS");
-            ConnectWs();
-        }
+
         console.log("navigating..." + Math.random() + loc.pathname);
         }
     },[loc])
@@ -31,21 +35,30 @@ export function Connector({children}){
     const ConnectWs = () => {
         soc = new WebSocket("wss://192.168.0.82:9999/gateway");
         soc.onopen = () => {
+            console.log(accessToken );
             soc.send(JSON.stringify({
-                "test" : "asdf",
-                "text" : "Connected"
+                "type" : "ENTER_APP",
+                "writer" : "admin",
+                "text" : "Connected",
             }));
+        }
+
+        soc.onmessage = () => {
+
         }
     }
 
 
 
     //로그인 검증 함수
-    const verifyLogin = () =>
+    const verifyLogin = async () =>
     {
            const temptok = localStorage.getItem("logintoken");  
+           console.log(jwtDecode(temptok));
+           if(temptok != undefined){
+                setAccessToken(jwtDecode(temptok));
+           }
             const exp = Math.floor(Date.now() / 1000); // 현재시간
-            console.log({ exp }); 
             let decoded;
 
             const getAcc = () => {
@@ -62,6 +75,8 @@ export function Connector({children}){
                                     console.log(res);
                                     const token = res.headers['authorization'].split(' ')[1];
                                     localStorage.setItem('logintoken', token);
+                                    setAccessToken(jwtDecode(token));
+
                                     console.log("엑세스 재발급 완료." + token);
                             }).catch((err) => { 
                                     localStorage.removeItem('logintoken');

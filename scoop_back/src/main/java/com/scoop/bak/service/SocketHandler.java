@@ -9,6 +9,7 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scoop.bak.classes.TestMessage;
 
@@ -30,6 +31,14 @@ public class SocketHandler implements WebSocketHandler {
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println(message.getPayload());
+		JsonNode jn = mapper.readTree(message.getPayload().toString());
+		switch (jn.get("type").asText()) 
+		{
+		case "ENTER_APP":
+			System.out.println(String.format("%s 유저가 입장헀습니다." , jn.get("writer")));
+			break;
+		}
+
 		TestMessage m = mapper.readValue(message.getPayload().toString(), TestMessage.class);
 		System.out.println(m);
 		System.out.println(m.getText());

@@ -9,8 +9,8 @@ export function Sidebar() {
     
     return (
         <div class="scroll">
-            <ClickContainer name="test" channel="channel/11234213331232"></ClickContainer>
-            <ClickContainer name="test2" channel="channel/sdsad"></ClickContainer>
+            <ClickContainer name="test" channel="channel/test"></ClickContainer>
+            <ClickContainer name="test2" channel="channel/test2"></ClickContainer>
             <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
             <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
             <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>

@@ -4,6 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class TestMessage {
- private String test;
+ private String writer;
+ private String channel;
  private String text;
+ 
 }
