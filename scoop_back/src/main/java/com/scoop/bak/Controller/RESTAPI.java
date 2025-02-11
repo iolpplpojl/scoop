@@ -61,7 +61,9 @@ public class RESTAPI {
 	public ResponseEntity<?> Refresh(HttpServletRequest req)
 	{
 		Cookie[] coo = req.getCookies();
-		
+		if(coo == null) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰");
+		}
 		Cookie ref = null;
 		for(Cookie c : coo) {
 			if(c.getName().equals("ref")) {
@@ -72,6 +74,7 @@ public class RESTAPI {
 			System.out.println(c.getValue());
 			System.out.println(c.getAttributes());
 		}
+		
 		
 			if(serv.Verify(ref != null ? ref.getValue() : ""))
 			{
