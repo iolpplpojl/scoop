@@ -1,17 +1,24 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { Context, useWebSocket } from "../Connector";
 
 
 export function ChatPage(props){
     const {id} = useParams();
-    const {sendMessage} = useContext(Context);
+    const {sendMessage,sendRegister,Sub} = useContext(Context);
 
     const [msg, setMsg] = useState("");
     const sendHandle = () => {
-        sendMessage(msg);
+        sendMessage(msg, id);
         setMsg("");
     }
+
+    useEffect(() => {
+        sendRegister(id);
+        Sub(id);
+        console.log(id + "로 이동함");
+    },[id]);
+
 
     const activeEnter = (e) => {
         if(e.key === "Enter"){

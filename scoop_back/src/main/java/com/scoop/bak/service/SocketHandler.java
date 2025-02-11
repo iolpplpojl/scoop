@@ -1,5 +1,6 @@
 package com.scoop.bak.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -19,7 +20,9 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class SocketHandler implements WebSocketHandler {
 	private final ObjectMapper mapper;
-
+	
+	@Autowired
+	MessageSender sender;
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		// TODO Auto-generated method stub
@@ -34,9 +37,15 @@ public class SocketHandler implements WebSocketHandler {
 		JsonNode jn = mapper.readTree(message.getPayload().toString());
 		switch (jn.get("type").asText()) 
 		{
-		case "ENTER_APP":
-			System.out.println(String.format("%s 유저가 입장헀습니다." , jn.get("writer")));
-			break;
+			case "ENTER_APP":	
+				System.out.println(String.format("%s 유저가 입장헀습니다." , jn.get("writer")));
+				break;
+			case "ENTER_CHANNEL":
+				sender.Register(jn.get("channel_id").asText(), session);
+				break;
+			case "SEND_MESSAGE":
+				sender.Send(jn.get("channel_id").asText(),jn.get("text").asText());
+				break;
 		}
 	}
 

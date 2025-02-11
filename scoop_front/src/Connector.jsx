@@ -10,6 +10,8 @@
         const [messageQueue, setMessageQueue] = useState(null);
         const [accessToken, setAccessToken] = useState();    
         const [wsConnected, setWsConnected] = useState(false);
+        
+        const [subChannel, setSubChannel] = useState({});
         const socRef = useRef();
         
         useEffect(() => {
@@ -23,6 +25,9 @@
             }
         },[loc])
 
+        useEffect( () => {
+            console.log(subChannel);
+        },[subChannel])
         useEffect(() => { 
             if(wsConnected !== true){
                 ConnectWs();
@@ -49,15 +54,13 @@
                     "type" : "NOPE  ",
                     "writer" : "admin",
                 }))
-            }
+            }   
             socRef.current.onclose = () => {
                 console.log("discon");
                 setWsConnected(false);
             }
             }
         }
-
-
 
         //로그인 검증 함수
         const verifyLogin = () =>
@@ -137,16 +140,46 @@
                 //axios("주소", 토큰)     : 백엔드 유효 검증
                 return true; 
             }
-
-            const sendMessage = (Message) => {
+            
+            const sendRegister = (id) => {
                 socRef.current.send(JSON.stringify({
-                    "type" : "NOPE  ",
+                    "type" : "ENTER_CHANNEL",
+                    "channel_id" : id,
+                    "writer" : "admin",
+                }))        
+            }
+            const sendMessage = (Message, id) => {
+                socRef.current.send(JSON.stringify({
+                    "type" : "SEND_MESSAGE",
+                    "channel_id" : id,
                     "writer" : "admin",
                     "text" : Message
                 }))            
             }
+                                    // 채널 , 유저 
+        const Sub = (channel) => {
+            console.log("섭")
+            const user = accessToken.sub;
+            setSubChannel(temp => ({ // 기존 채널 => 
+                    ...temp, // 기존채널 배열
+                    [channel] : temp[channel]?.includes(user)
+                    ? temp[channel] 
+                    : [...(temp[channel] || []), {user:user, textQueue:"text"}]
+                })
+            )
+
+        }
+        const unSub = (channel) => {
+            const user = accessToken.sub;
+            setSubChannel(prev => ({
+                ...prev,
+                [channel]: prev[channel]?.filter(cb => cb !== user) || [],
+            }));
+        };
+
+            
         return (
-            <Context.Provider value={{sendMessage}}>
+            <Context.Provider value={{sendMessage,sendRegister,Sub,unSub}}>
                     {children}
             </Context.Provider>
         )
