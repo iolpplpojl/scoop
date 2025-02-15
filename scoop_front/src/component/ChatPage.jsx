@@ -5,7 +5,7 @@ import { Context, useWebSocket } from "../Connector";
 
 export function ChatPage(props){
     const {id} = useParams();
-    const {sendMessage,sendRegister,Sub} = useContext(Context);
+    const {sendMessage,sendRegister,Sub,setReceived} = useContext(Context);
 
     const [msg, setMsg] = useState("");
     const sendHandle = () => {
@@ -15,7 +15,8 @@ export function ChatPage(props){
 
     useEffect(() => {
         sendRegister(id);
-        Sub(id);
+        //Sub(id);
+        setReceived(id);
         console.log(id + "로 이동함");
     },[id]);
 

@@ -44,7 +44,8 @@ public class SocketHandler implements WebSocketHandler {
 				sender.Register(jn.get("channel_id").asText(), session);
 				break;
 			case "SEND_MESSAGE":
-				sender.Send(jn.get("channel_id").asText(),jn.get("text").asText());
+				sender.Send(jn.get("writer").asText(),jn.get("channel_id").asText(),jn.get("text").asText());
+				
 				break;
 		}
 	}

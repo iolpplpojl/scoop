@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scoop.bak.classes.Channel;
+import com.scoop.bak.classes.TestMessage;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -41,8 +44,11 @@ public class MessageSender {
 			throw new IllegalArgumentException("Unexpected value: ");
 		}
 	}
-	
-	public void Send(String channel, String Message) throws IOException {
+    ObjectMapper objectMapper = new ObjectMapper();
+
+	public void Send(String Writer,String channel, String Message) throws IOException {
+        String jsonMessage = objectMapper.writeValueAsString(new TestMessage(Writer,channel,Message));
+        System.out.println(jsonMessage);
 		ArrayList<WebSocketSession> soc;
 		switch (channel) {
 		case "A": 
@@ -57,8 +63,8 @@ public class MessageSender {
 		if(soc != null) {
 			for(WebSocketSession s : soc) {
 				if(s.isOpen()) {
-					
-					s.sendMessage(new TextMessage(Message));
+			        s.sendMessage(new TextMessage(jsonMessage));
+
 				}
 			
 			}

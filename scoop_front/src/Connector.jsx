@@ -8,7 +8,7 @@
     export function Connector({children}){
         const nav = useNavigate();
         const [messageQueue, setMessageQueue] = useState(null);
-        const [accessToken, setAccessToken] = useState();    
+        const [accessToken, setAccessToken] = useState({});    
         const [wsConnected, setWsConnected] = useState(false);
         
         const [subChannel, setSubChannel] = useState({});
@@ -49,9 +49,15 @@
                 }));
             }
 
-            socRef.current.onmessage = () => {
+            socRef.current.onmessage = (msg) => {
+                const message = msg
+                console.log(JSON.parse(msg.data));
+                setMessageQueue(
+                    [message]
+
+                )
                 socRef.current.send(JSON.stringify({
-                    "type" : "NOPE  ",
+                    "type" : "RECEIVED",
                     "writer" : "admin",
                 }))
             }   
@@ -177,9 +183,11 @@
             }));
         };
 
-            
+         const setReceived = (id) => {
+            return
+         };
         return (
-            <Context.Provider value={{sendMessage,sendRegister,Sub,unSub}}>
+            <Context.Provider value={{sendMessage,sendRegister,Sub,unSub,setReceived}}>
                     {children}
             </Context.Provider>
         )

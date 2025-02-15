@@ -90,6 +90,7 @@ public class RESTAPI {
 	@GetMapping("/VerifyAccess")
 	public ResponseEntity<?> Verify(@RequestParam("key") String token)
 	{
+		System.out.println("bruh");
 		if(serv.Verify(token)) {
 	        return ResponseEntity.ok()
 	                .body("유효한 토큰"); 
