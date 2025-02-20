@@ -18,16 +18,19 @@
 }
 .OutputChat{
   flex:1;
+  height: calc(100vh - 4rem); /* InputChat의 고정 높이를 빼고, OutputChat의 높이 고정 */
 
 }
 .InputChat{
   margin: 0;
   padding: 0;
-  height : 4rem;
+  min-height : 4rem;
   background-color: #586275;
+  flex-shrink: 0;
 }
 .OutputChat ul{
-  width: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
   height: 95%;
   display: flex;
   flex-direction: column-reverse;

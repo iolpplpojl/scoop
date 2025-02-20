@@ -7,7 +7,7 @@
 
     export function Connector({children}){
         const nav = useNavigate();
-        const [messageQueue, setMessageQueue] = useState(null);
+        const [messageQueue, setMessageQueue] = useState({});
         const [accessToken, setAccessToken] = useState({});    
         const [wsConnected, setWsConnected] = useState(false);
         
@@ -25,16 +25,21 @@
             }
         },[loc])
 
+        useEffect(()=>{
+            console.log(messageQueue);
+        },[messageQueue])
         useEffect( () => {
             console.log(subChannel);
         },[subChannel])
         useEffect(() => { 
             if(wsConnected !== true){
+
                 ConnectWs();
             }
         }, [accessToken])
 
         const ConnectWs = () => {
+            setWsConnected(true);
             console.log(accessToken + "토큰");
             if(wsConnected !== true && accessToken !== undefined){
                 socRef.current = new WebSocket("wss://192.168.0.82:9999/gateway");
@@ -48,14 +53,41 @@
                     "text" : "Connected",
                 }));
             }
-
+            function onMessage(msg){
+                setMessageQueue((prev) => 
+                    {
+                        const { writer, channel, text: message } = JSON.parse(msg);
+                        console.log(msg.writer + 'zz' + writer + channel  + message);
+                        if(prev[channel])
+                        {
+                            console.log("메세지 채널 큐 있음" + channel)
+                            return { ...prev,
+                                [channel] : [ ...prev[channel], {writer,message}]
+                            }   
+                        }
+                        else{
+                            return { ...prev,
+                                    [channel] : [{writer,message}]
+                            }
+                        }
+                        //return {[message.data["channel"]] : message.data};
+                       
+                    }
+                );
+            }
             socRef.current.onmessage = (msg) => {
                 const message = msg
-                console.log(JSON.parse(msg.data));
-                setMessageQueue(
-                    [message]
+                try{
+                    console.log(JSON.parse(msg.data));
+                    onMessage(message.data);
+                    
 
-                )
+                }
+                catch{
+                    console.log(msg);
+                }
+            
+        
                 socRef.current.send(JSON.stringify({
                     "type" : "RECEIVED",
                     "writer" : "admin",
@@ -64,6 +96,7 @@
             socRef.current.onclose = () => {
                 console.log("discon");
                 setWsConnected(false);
+                socRef = null;
             }
             }
         }
@@ -187,7 +220,7 @@
             return
          };
         return (
-            <Context.Provider value={{sendMessage,sendRegister,Sub,unSub,setReceived}}>
+            <Context.Provider value={{sendMessage,sendRegister,Sub,unSub,setReceived,messageQueue}}>
                     {children}
             </Context.Provider>
         )
