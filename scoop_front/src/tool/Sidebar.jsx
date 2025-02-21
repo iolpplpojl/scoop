@@ -11,21 +11,6 @@ export function Sidebar() {
         <div class="scroll">
             <ClickContainer name="test" channel="A"></ClickContainer>
             <ClickContainer name="test2" channel="B"></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/sdsad  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/sdsad  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/sdsad  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
-            <ClickContainer name="test3" channel="channel/12321412  "></ClickContainer>
         </div>
     );
   }
