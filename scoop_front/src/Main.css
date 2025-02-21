@@ -19,7 +19,6 @@
 .OutputChat{
   flex:1;
   height: calc(100vh - 4rem); /* InputChat의 고정 높이를 빼고, OutputChat의 높이 고정 */
-
 }
 .InputChat{
   margin: 0;

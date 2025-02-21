@@ -26,7 +26,9 @@ export function ChatPage(props){
                 elem.innerHTML = `<b>${element['writer']}</b> : ${element['message']}`
                 temp.appendChild(elem);
             });
-        
+            let top = document.querySelector(".OutputChat ul");
+            top.scrollTop = top.scrollHeight;
+
         }
     }
     useEffect(() => {
