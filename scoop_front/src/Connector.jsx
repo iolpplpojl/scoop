@@ -42,7 +42,7 @@
             setWsConnected(true);
             console.log(accessToken + "토큰");
             if(wsConnected !== true && accessToken !== undefined){
-                socRef.current = new WebSocket("wss://192.168.0.82:9999/gateway");
+                socRef.current = new WebSocket("wss://192.168.0.89:9999/gateway");
             socRef.current.onopen = () => {
                 console.log(accessToken);
                 console.log(socRef.current.readyState);
@@ -116,7 +116,7 @@
                     localStorage.removeItem("logintoken");
                         const doLogin = () => {
                             //axios로 로그인 요청, const trylogin = true일때 실행 X, response not ok면 다시 trylogin = false;, ok면 JWT 생성하고 메인으로 이동
-                                axios("https://192.168.0.82:9999/api/RefreshAccess", {
+                                axios("https://192.168.0.89:9999/api/RefreshAccess", {
                                     method : "get",
                                     params : {},
                                     withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
