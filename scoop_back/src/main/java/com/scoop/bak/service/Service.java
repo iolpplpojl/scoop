@@ -1,10 +1,7 @@
 package com.scoop.bak.service;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,11 +10,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.Repository.MemberRepo;
+import com.scoop.bak.classes.Friend;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
 
 @org.springframework.stereotype.Service
@@ -55,6 +51,15 @@ public Cookie createCookie(MemberRes mem) {
 	coo.setAttribute("SameSite", "None");
 	return coo;
 	
+}
+
+public List<Friend> findFriendsBySub(String sub) {
+	   List<String> friendsUserId = repo.findFriendUserIds(sub);
+	   List<Friend> friends = new ArrayList<Friend>();
+	   for(String a:friendsUserId) {
+	      friends.add(repo.findUserInfo(a));
+	   }
+	   return friends;
 }
 
 public String extractSub(Cookie coo) {
