@@ -66,15 +66,16 @@ public class RESTAPI {
 		}
 		Cookie ref = null;
 		for(Cookie c : coo) {
+			System.out.println(c.getName() + "z");
+			System.out.println(c.getValue());
+			System.out.println(c.getAttributes());
 			if(c.getName().equals("ref")) {
 				ref = c;
 				break;
 			}
-			System.out.println(c.getName());
-			System.out.println(c.getValue());
-			System.out.println(c.getAttributes());
 		}
 		
+
 		
 			if(serv.Verify(ref != null ? ref.getValue() : ""))
 			{
