@@ -61,7 +61,7 @@ export function ChatPage(props){
             </ul>
          </div>
          <div class="InputChat">
-            <input value={msg} onChange={handleMsgInput} onKeyDown={(e) => activeEnter(e)}></input> <button onClick={sendHandle}>SEND</button>
+            <input value={msg} onChange={handleMsgInput}         onKeyDown={(e) => activeEnter(e)}           ></input> <button onClick={sendHandle}>SEND</button>
          </div> 
         </div>
     )

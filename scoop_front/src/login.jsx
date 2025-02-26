@@ -19,7 +19,7 @@ export function Login(props){
         console.log(id);
         console.log(pwd);
         console.log("doLogin");
-        axios("https://192.168.0.89:9999/api/login", {
+        axios("https://192.168.0.82:9999/api/login", {
             method : "get",
             params : {
                 id: id,
