@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.classes.MemberRes;
+import com.scoop.bak.classes.user.User;
 import com.scoop.bak.service.Service;
 
 import io.jsonwebtoken.Jwts;
@@ -38,14 +39,14 @@ public class RESTAPI {
 	@GetMapping("/login")
 	public ResponseEntity<?> login(@RequestParam("id") String id, @RequestParam("pwd") String pwd, HttpServletResponse res) {
 		System.out.println("id");
-		MemberRes mem = serv.loadMemberByUserId(id);
+		User mem = serv.loadUserByUserName(id);
 		if(mem == null) {
 			return ResponseEntity.badRequest().body("로그인 처리 실패");
 		}
-		System.out.println(mem.getUserPwd()  + pwd);
-		if(mem.getUserPwd().equals(pwd) )
+		System.out.println(mem.getPwd()  + pwd);
+		if(mem.getPwd().equals(pwd) )
 		{
-			System.out.println(mem.getUserId() + "의 로그인 처리 됨");
+			System.out.println(mem.getId() + "의 로그인 처리 됨");
 			res.addCookie(serv.createCookie(mem));
 
 	        return ResponseEntity.ok()
@@ -80,7 +81,7 @@ public class RESTAPI {
 			if(serv.Verify(ref != null ? ref.getValue() : ""))
 			{
 		        return ResponseEntity.ok()
-		                .header(HttpHeaders.AUTHORIZATION, "Bearer " + serv.genAccessToken(serv.loadMemberByUserId(serv.extractSub(ref))))	
+		                .header(HttpHeaders.AUTHORIZATION, "Bearer " + serv.genAccessToken(serv.loadUserByCode(serv.extractSub(ref))))	
 		                .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")  // 캐시 무효화
 		                .header(HttpHeaders.PRAGMA, "no-cache")
 		                .header(HttpHeaders.EXPIRES, "0")

@@ -13,8 +13,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.Repository.MemberRepo;
+import com.scoop.bak.Repository.UserRepo;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
+import com.scoop.bak.classes.user.User;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -23,7 +25,9 @@ import jakarta.servlet.http.Cookie;
 @org.springframework.stereotype.Service
 public class Service implements UserDetailsService{
  private MemberRepo repo;
-	JwtUtil jwt;
+ private UserRepo repo_user;
+ 
+ JwtUtil jwt;
 
  public MemberRes loadMemberByUserId( String i) {
 	 MemberRes mem  = repo.findByUserId(i).orElse(null);
@@ -31,9 +35,19 @@ public class Service implements UserDetailsService{
  }
  
  
+ public User loadUserByUserName(String i) {
+	 User u = repo_user.findById(i).orElse(null);
+	 return u;
+ }
+ 
+ public User loadUserByCode(String i) {
+	 User u = repo_user.findByIdentifyCode(Long.parseLong(i)).orElse(null);
+	 return u;
+ }
+ 
  @Autowired
- public Service(MemberRepo rep, JwtUtil jw) {
-
+ public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2) {
+	 repo_user = rep2;
 	 repo = rep;
 	 jwt = jw;
 	  System.out.println(repo);
@@ -46,7 +60,7 @@ public UserDetails loadUserByUsername(String username) throws UsernameNotFoundEx
 	return new MemberResDetails(mem);
 }
 
-public Cookie createCookie(MemberRes mem) {
+public Cookie createCookie(User mem) {
 	Cookie coo = new Cookie("ref", genRefreshToken(mem));
 	coo.setHttpOnly(true);
 	coo.setSecure(true);
@@ -60,10 +74,11 @@ public Cookie createCookie(MemberRes mem) {
 public String extractSub(Cookie coo) {
 	return jwt.extractSub(coo.getValue());
 }
-public String genAccessToken(MemberRes mem) {
-	 return jwt.genAccesToken(mem.getUserId());
+
+public String genAccessToken(User mem) {
+	 return jwt.genAccesToken(mem.getIdentifyCode().toString());
 }	
-public String genRefreshToken(MemberRes mem) {
+public String genRefreshToken(User mem) {
 	return jwt.genRefreshToken(mem);
 }
 

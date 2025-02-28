@@ -16,7 +16,8 @@ import lombok.Getter;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long identify_code; //식별코드
+	@Column(name= "identify_code")
+	private Long identifyCode; //식별코드
 	
 	@Column(nullable = false, unique = true)
 	private String id; // id

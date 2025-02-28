@@ -19,7 +19,7 @@ export function Login(props){
         console.log(id);
         console.log(pwd);
         console.log("doLogin");
-        axios("https://192.168.0.89:9999/api/login", {
+        axios("https://192.168.0.82:9999/api/login", {
             method : "get",
             params : {
                 id: id,
@@ -29,7 +29,6 @@ export function Login(props){
             withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
 
         }).then((res) => {
-                
                 console.log(res);
                 const token = res.headers['authorization'].split(' ')[1];
                 console.log(token);

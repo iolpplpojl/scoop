@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.scoop.bak.classes.MemberRes;
+import com.scoop.bak.classes.user.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -36,20 +37,21 @@ public class JwtUtil {
     
     
     //리프레쉬 토큰 생성
-    public String genRefreshToken(MemberRes mem) {
+    public String genRefreshToken(User mem) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("tempcode", UUID.randomUUID());
-        claims.put("id", mem.getUserId());
+        claims.put("id", mem.getIdentifyCode());
         claims.put("logged-in", LocalDateTime.now().toString());
     	
     	 return Jwts.builder()
     			 .setClaims(claims)
-    			 .setSubject(mem.getUserId())
+    			 .setSubject(mem.getIdentifyCode().toString())
     			 .setIssuedAt(new Date())
     			 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime))
     			 .signWith(SignatureAlgorithm.HS256,secretKey)
     			 .compact();
     }	
+    
     
     //엑세스 토큰 인증
     public boolean validateToken(String token) {
@@ -93,6 +95,9 @@ public class JwtUtil {
             throw new RuntimeException("Failed to parse JWT token", e);
         }
     }
+    
+    
+    
     //엑세스 토큰 생성
     public String genAccesToken(String id) {
         Map<String, Object> claims = new HashMap<>();
