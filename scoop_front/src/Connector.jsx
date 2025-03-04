@@ -99,7 +99,7 @@
             socRef.current.onclose = () => {
                 console.log("discon");
                 setWsConnected(false);
-                socRef = null;
+                socRef.current = null;
             }
             }
         }
