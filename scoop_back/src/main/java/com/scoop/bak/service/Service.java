@@ -1,10 +1,9 @@
 package com.scoop.bak.service;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,14 +11,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.scoop.bak.JwtUtil;
+import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.MemberRepo;
 import com.scoop.bak.Repository.UserRepo;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
+import com.scoop.bak.classes.user.Friend;
+import com.scoop.bak.classes.user.FriendDTO;
 import com.scoop.bak.classes.user.User;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
 
 @org.springframework.stereotype.Service
@@ -27,6 +27,8 @@ public class Service implements UserDetailsService{
  private MemberRepo repo;
  private UserRepo repo_user;
  
+ @Autowired
+ private FriendRepo repo_friend;
  JwtUtil jwt;
 
  public MemberRes loadMemberByUserId( String i) {
@@ -85,4 +87,24 @@ public String genRefreshToken(User mem) {
 public boolean Verify(String token) {
 	return jwt.validateToken(token);
 }
+
+public List<FriendDTO> findFriendsBySub(Long sub) {
+    List<Friend> friends = repo_friend.findFriendsBySub(sub); // identifyCode가 User1이나 User2인 friend들을 list로 반환
+    List<FriendDTO> users = new ArrayList<>();
+
+    for (Friend friend : friends) {
+        User user;
+        if (friend.getUserA().equals(sub)) {
+            user = repo_user.findById(friend.getUserB()).orElse(null);
+        } else {
+            user = repo_user.findById(friend.getUserA()).orElse(null);
+        }
+
+        if (user != null) {
+            users.add(new FriendDTO(user.getId(), user.getNickname()));
+        }
+    }
+    return new ArrayList<>(users); // Set을 List로 변환하여 반환
+}
+
 }

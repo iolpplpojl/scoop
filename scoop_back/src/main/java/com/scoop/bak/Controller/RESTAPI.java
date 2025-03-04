@@ -1,6 +1,8 @@
 package com.scoop.bak.Controller;
 
 import java.awt.geom.CubicCurve2D;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -8,12 +10,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.classes.MemberRes;
+import com.scoop.bak.classes.user.Friend;
+import com.scoop.bak.classes.user.FriendDTO;
 import com.scoop.bak.classes.user.User;
 import com.scoop.bak.service.Service;
 
@@ -25,7 +31,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //
 @RequestMapping("/api")
 @RestController
-@CrossOrigin(origins = "http://192.168.0.82:3000") // 프론트엔드 주소 허용
+@CrossOrigin(origins = "http://121.130.189.100:3000") // 프론트엔드 주소 허용
 public class RESTAPI {
 	
 	Service serv;
@@ -99,6 +105,14 @@ public class RESTAPI {
 		};
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰");
 
+	}
+	
+	@PostMapping("/getfriends")
+	   public List<FriendDTO> getfriends(@RequestBody Map<String, Long> request) {
+	       Long sub = request.get("sub");  // JSON에서 sub 값 추출
+	       System.out.println("받은 sub 값: " + sub);  // sub 값 확인
+	       List<FriendDTO> friends = serv.findFriendsBySub(sub);
+	       return friends;
 	}
 	
 }
