@@ -19,7 +19,7 @@ export function Login(props){
         console.log(id);
         console.log(pwd);
         console.log("doLogin");
-        axios("https://192.168.0.82:9999/api/login", {
+        axios("https://211.212.129.132:9999/api/login", {
             method : "get",
             params : {
                 id: id,
@@ -40,14 +40,18 @@ export function Login(props){
         });
         
     }
+    function reGisterform(){
+        nav("/register");
+    }
     return(
-        <div class="Channel">
-        <div class="OutputChat">
+        <div className="Channel">
+        <div className="OutputChat">
             <form onSubmit={handleSubmit}>
                 <input id="id" required  value = {id} onChange={(e) => setId(e.target.value)}></input> ID <p></p>
                 <input id="pwd" required value ={pwd} onChange={(e) => setPwd(e.target.value)}></input> PWD <p></p>
                 <button type="submit"> go </button>
             </form>
+            <button type="button" onClick={reGisterform}> 회원가입 </button>
         </div>
         </div>
     )

@@ -1,0 +1,80 @@
+body {
+    background-color: #1e1f22;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.signup-container {
+    width: 100%;
+    max-width: 500px; /* 컨테이너의 최대 너비를 500px로 확장 */
+    padding: 32px; /* 여백을 좀 더 넓힘 */
+    border-radius: 8px;
+    background-color: #313338;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+h2 {
+    margin-bottom: 24px; /* 제목과 입력창 사이의 간격을 좀 더 넓힘 */
+    font-size: 26px; /* 제목 크기 확대 */
+    color: #fff;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #b9bbbe;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px; /* 입력창의 여백을 더 넓힘 */
+    font-size: 16px;
+    border: none;
+    border-radius: 6px; /* 입력창 모서리 둥글게 */
+    background-color: #1e1f22;
+    color: #fff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.input-group input:focus {
+    border: 1px solid #5865f2;
+    box-shadow: 0 0 5px rgba(88, 101, 242, 0.5);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px; /* 버튼의 여백을 더 넓힘 */
+    font-size: 18px; /* 버튼 글자 크기 확대 */
+    font-weight: bold;
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    border-radius: 6px; /* 버튼 모서리 둥글게 */
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.submit-btn:hover {
+    background-color: #4752c4;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
