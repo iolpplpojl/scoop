@@ -8,12 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.classes.MemberRes;
+import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.User;
 import com.scoop.bak.service.Service;
 
@@ -25,7 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //
 @RequestMapping("/api")
 @RestController
-@CrossOrigin(origins = "http://192.168.0.82:3000") // 프론트엔드 주소 허용
+@CrossOrigin(origins = "http://211.212.129.132:3000") // 프론트엔드 주소 허용
 public class RESTAPI {
 	
 	Service serv;
@@ -100,6 +103,13 @@ public class RESTAPI {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰");
 
 	}
-	
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody SignupRequest request) { 
+	    serv.registerUser(request);
+	    System.out.println(request);
+	    return ResponseEntity.ok("{\"status\":\"success\"}");
+	}
+
+
 }
 

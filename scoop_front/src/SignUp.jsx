@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ useNavigate 추가
-import './Signup.css';
+//import './Signup.css';
 
 const SignUp = () => {
     const [id, setId] = useState('');
@@ -14,16 +14,16 @@ const SignUp = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('https://211.212.129.132:8080/api/register', {
+            const response = await fetch('https://211.212.129.132:9999/api/register', {
                 method: 'POST',
-                body: new URLSearchParams({
+                body: JSON.stringify({
                     id: id,
-                    password: password,
+                    pwd: password,
                     email: email,
                     nickname: nickname,
                 }),
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                 },
             });
 
@@ -32,7 +32,7 @@ const SignUp = () => {
                 setErrorMessage(data.error);
             } else {
                 alert('회원가입 성공');
-                navigate('/'); // ✅ 회원가입 후 홈으로 이동
+                navigate('/login'); 
             }
         } catch (error) {
             setErrorMessage('회원가입 실패');

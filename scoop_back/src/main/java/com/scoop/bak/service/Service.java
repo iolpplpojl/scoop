@@ -1,25 +1,21 @@
 package com.scoop.bak.service;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.Repository.MemberRepo;
 import com.scoop.bak.Repository.UserRepo;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
+import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.User;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
 
 @org.springframework.stereotype.Service
@@ -84,5 +80,21 @@ public String genRefreshToken(User mem) {
 
 public boolean Verify(String token) {
 	return jwt.validateToken(token);
+}
+public void registerUser(SignupRequest request) {
+    // 1. 중복 검사 (ID 기준)
+    Optional<User> existingUser = repo_user.findById(request.getId());
+    if (existingUser.isPresent()) {
+        throw new RuntimeException("이미 존재하는 사용자 ID입니다.");
+    }
+
+   
+    User newUser = new User();
+    newUser.setId(request.getId());
+    newUser.setPwd(request.getPwd());
+    newUser.setEmail(request.getEmail());
+    newUser.setNickname(request.getNickname());
+
+    repo_user.save(newUser); // DB에 저장
 }
 }
