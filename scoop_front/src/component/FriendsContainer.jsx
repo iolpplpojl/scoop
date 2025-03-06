@@ -37,7 +37,7 @@ export function FriendsContainer() {
   
     setLoading(true);
     setError(null);
-    const url = `https://121.130.189.100:9999/api/getfriends`;
+    const url = `https://192.168.0.89:9999/api/getfriends`;
   
     fetch(url, {
       method: 'POST',

@@ -20,7 +20,7 @@ public class WebSocketConfig implements WebSocketConfigurer{
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 	        registry.addHandler(sock, "/gateway")
-	        .setAllowedOrigins("https://121.130.189.100:3000/");
+	        .setAllowedOrigins("https://192.168.0.89:3000/");
 	        
 	    
 	}
