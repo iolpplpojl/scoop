@@ -9,10 +9,11 @@ const SignUp = () => {
     const [nickname, setNickname] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate(); // ✅ useNavigate() 사용
+    const REST = process.env.REACT_APP_RESTURL;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-            axios('https://172.16.17.63:9999/api/register', {
+            axios("https://"+REST+'/api/register', {
                 method: 'POST',
                 data: JSON.stringify({
                     id: id,

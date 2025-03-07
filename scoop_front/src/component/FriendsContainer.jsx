@@ -22,6 +22,8 @@ function getSubFromLoginToken() {
 }
 
 export function FriendsContainer() {
+  const REST = process.env.REACT_APP_RESTURL;
+
   const [friendsData, setFriendsData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -37,7 +39,7 @@ export function FriendsContainer() {
   
     setLoading(true);
     setError(null);
-    const url = `https://172.16.17.63:9999/api/getfriends`;
+    const url = `https://${REST}/api/getfriends`;
   
     fetch(url, {
       method: 'POST',

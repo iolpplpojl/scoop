@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 function getSubFromLoginToken() {
+
   const token = localStorage.getItem("logintoken");
   if (!token) {
     console.warn("로그인 토큰이 존재하지 않습니다.");
@@ -34,6 +35,7 @@ const AddFriend = ({ onClose }) => {
       setError("숫자만 입력 가능합니다.");
     }
   };
+  const REST = process.env.REACT_APP_RESTURL;
 
   const handleSubmit = () => {
     const sub = getSubFromLoginToken();
@@ -44,7 +46,7 @@ const AddFriend = ({ onClose }) => {
 
     console.log("📡 서버로 보낼 데이터:", { sub, friendCode });
 
-    const url = "https://172.16.17.63:9999/api/addfriend";
+    const url = `https://${REST}/api/addfriend`;
 
     fetch(url, {
       method: "POST",

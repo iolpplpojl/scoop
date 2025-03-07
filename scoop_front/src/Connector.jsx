@@ -6,6 +6,7 @@
     export const Context = createContext(null);
 
     export function Connector({children}){
+        const REST = process.env.REACT_APP_RESTURL;
         const nav = useNavigate();
         const [messageQueue, setMessageQueue] = useState({});
         const [accessToken, setAccessToken] = useState({});    
@@ -45,7 +46,7 @@
             console.log(JSON.stringify(accessToken));
             if(wsConnected !== true && JSON.stringify(accessToken) !== "{}")
             {
-                socRef.current = new WebSocket("wss://172.16.17.63:9999/gateway");
+                socRef.current = new WebSocket(`wss://${REST}/gateway`);
                 socRef.current.onopen = () => {
                 console.log(accessToken);
                 console.log(socRef.current.readyState);
@@ -119,7 +120,7 @@
                     localStorage.removeItem("logintoken");
                         const doLogin = () => {
                             //axios로 로그인 요청, const trylogin = true일때 실행 X, response not ok면 다시 trylogin = false;, ok면 JWT 생성하고 메인으로 이동
-                                axios("https://172.16.17.63:9999/api/RefreshAccess", {
+                                axios(`https://${REST}/api/RefreshAccess`, {
                                     method : "get",
                                     params : {},
                                     withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청      
@@ -156,7 +157,7 @@
                         }
                         const doVerify = () => {
                             //axios로 로그인 요청, const trylogin = true일때 실행 X, response not ok면 다시 trylogin = false;, ok면 JWT 생성하고 메인으로 이동
-                                axios("https://172.16.17.63:9999/api/VerifyAccess", {
+                                axios(`https://${REST}/api/VerifyAccess`, {
                                     method : "get",
                                     params : {
                                         key: temptok,

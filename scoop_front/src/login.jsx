@@ -4,8 +4,9 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-
 export function Login(props){
+    const REST = process.env.REACT_APP_RESTURL;
+
     const nav = useNavigate();
     const [id,setId] = useState("");
     const [pwd,setPwd] = useState("");
@@ -16,10 +17,11 @@ export function Login(props){
     
     function doLogin(){
     //axios로 로그인 요청, const trylogin = true일때 실행 X, response not ok면 다시 trylogin = false;, ok면 JWT 생성하고 메인으로 이동
+        console.log(REST);
         console.log(id);
         console.log(pwd);
         console.log("doLogin");
-        axios("https://172.16.17.63:9999/api/login", {
+        axios(`https://${REST}/api/login`, {
             method : "get",
             params : {
                 id: id,
