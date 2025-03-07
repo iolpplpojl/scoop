@@ -19,7 +19,7 @@
         const loc = useLocation();
         // /login이 아닐때 페이지 이동마다 로그인 검증
         useEffect(()=>{
-            if(loc.pathname !="/login"){
+            if(!(loc.pathname =="/login" || loc.pathname == "/register")){
                 verifyLogin();
                 console.log("navigating..." + Math.random() + loc.pathname);
             }
@@ -45,7 +45,7 @@
             console.log(JSON.stringify(accessToken));
             if(wsConnected !== true && JSON.stringify(accessToken) !== "{}")
             {
-                socRef.current = new WebSocket("wss://192.168.0.89:9999/gateway");
+                socRef.current = new WebSocket("wss://172.16.17.63:9999/gateway");
                 socRef.current.onopen = () => {
                 console.log(accessToken);
                 console.log(socRef.current.readyState);
@@ -119,7 +119,7 @@
                     localStorage.removeItem("logintoken");
                         const doLogin = () => {
                             //axios로 로그인 요청, const trylogin = true일때 실행 X, response not ok면 다시 trylogin = false;, ok면 JWT 생성하고 메인으로 이동
-                                axios("https://192.168.0.89:9999/api/RefreshAccess", {
+                                axios("https://172.16.17.63:9999/api/RefreshAccess", {
                                     method : "get",
                                     params : {},
                                     withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청      
@@ -156,7 +156,7 @@
                         }
                         const doVerify = () => {
                             //axios로 로그인 요청, const trylogin = true일때 실행 X, response not ok면 다시 trylogin = false;, ok면 JWT 생성하고 메인으로 이동
-                                axios("https://192.168.0.89:9999/api/VerifyAccess", {
+                                axios("https://172.16.17.63:9999/api/VerifyAccess", {
                                     method : "get",
                                     params : {
                                         key: temptok,

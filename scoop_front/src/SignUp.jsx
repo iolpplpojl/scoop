@@ -12,7 +12,7 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-            axios('https://192.168.0.82:9999/api/register', {
+            axios('https://172.16.17.63:9999/api/register', {
                 method: 'POST',
                 data: JSON.stringify({
                     id: id,

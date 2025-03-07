@@ -44,7 +44,7 @@ const AddFriend = ({ onClose }) => {
 
     console.log("📡 서버로 보낼 데이터:", { sub, friendCode });
 
-    const url = "https://192.168.0.89:9999/api/addfriend";
+    const url = "https://172.16.17.63:9999/api/addfriend";
 
     fetch(url, {
       method: "POST",
