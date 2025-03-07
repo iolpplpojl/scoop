@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ useNavigate 추가
 //import './Signup.css';
-
+import axios from 'axios';
 const SignUp = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
@@ -12,11 +12,9 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        try {
-            const response = await fetch('https://211.212.129.132:9999/api/register', {
+            axios('https://192.168.0.82:9999/api/register', {
                 method: 'POST',
-                body: JSON.stringify({
+                data: JSON.stringify({
                     id: id,
                     pwd: password,
                     email: email,
@@ -25,8 +23,18 @@ const SignUp = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+            })
+            .then((res) => {
+                console.log(res);
+                alert("done");
+                navigate("/login");
+            }).catch((err) => {
+                console.log(err.response);
+                alert("error");
             });
-
+        }
+        
+/** 
             const data = await response.json();
             if (data.status === 'error') {
                 setErrorMessage(data.error);
@@ -37,8 +45,10 @@ const SignUp = () => {
         } catch (error) {
             setErrorMessage('회원가입 실패');
         }
+            
     };
-
+    */
+    
     return (
         <div className="signup-container">
             <h2>회원가입</h2>

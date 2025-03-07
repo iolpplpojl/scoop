@@ -81,11 +81,12 @@ public String genRefreshToken(User mem) {
 public boolean Verify(String token) {
 	return jwt.validateToken(token);
 }
-public void registerUser(SignupRequest request) {
+public boolean registerUser(SignupRequest request) {
     // 1. 중복 검사 (ID 기준)
     Optional<User> existingUser = repo_user.findById(request.getId());
     if (existingUser.isPresent()) {
-        throw new RuntimeException("이미 존재하는 사용자 ID입니다.");
+    	System.out.println("중복ID");
+        return false;
     }
 
    
@@ -96,5 +97,6 @@ public void registerUser(SignupRequest request) {
     newUser.setNickname(request.getNickname());
 
     repo_user.save(newUser); // DB에 저장
+    return true;
 }
 }

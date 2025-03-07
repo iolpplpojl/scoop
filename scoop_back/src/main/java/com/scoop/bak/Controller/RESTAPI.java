@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //
 @RequestMapping("/api")
 @RestController
-@CrossOrigin(origins = "http://211.212.129.132:3000") // 프론트엔드 주소 허용
+@CrossOrigin(origins = "http://192.168.0.82:3000") // 프론트엔드 주소 허용
 public class RESTAPI {
 	
 	Service serv;
@@ -105,9 +105,14 @@ public class RESTAPI {
 	}
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody SignupRequest request) { 
-	    serv.registerUser(request);
-	    System.out.println(request);
-	    return ResponseEntity.ok("{\"status\":\"success\"}");
+		if(serv.registerUser(request)) {
+			System.out.println(request);
+	    	return ResponseEntity.ok("{\"status\":\"success\"}");
+		}
+		else {
+	    	return ResponseEntity.badRequest().body("{\"status\":\"success\"}");
+
+		}
 	}
 
 
