@@ -107,4 +107,24 @@ public List<FriendDTO> findFriendsBySub(Long sub) {
     return new ArrayList<>(users); // Set을 List로 변환하여 반환
 }
 
+
+public void addFriend(Long sub, Long identifyCode) {
+	Friend friend = new Friend();
+	friend.setState(0);
+	friend.setUserA(sub);
+	friend.setUserB(identifyCode);
+	repo_friend.save(friend);
+	
+}
+
+
+public boolean findByIdentifyCode(Long friendCode) {
+	return repo_user.findByIdentifyCode(friendCode).isPresent();
+}
+
+
+public boolean IsFriend(Long sub, Long friendCode) {
+	return repo_friend.isFriend(sub, friendCode).isPresent();
+}
+
 }

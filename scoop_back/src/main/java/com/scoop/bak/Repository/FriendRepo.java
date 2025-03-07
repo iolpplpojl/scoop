@@ -14,5 +14,12 @@ import com.scoop.bak.classes.user.Friend;
 public interface FriendRepo extends JpaRepository<Friend, Long> {
 	@Query("SELECT f FROM Friend f WHERE (f.userA = :identifyCode OR f.userB = :identifyCode) AND f.state = 1")
 	List<Friend> findFriendsBySub(@Param("identifyCode") Long identifyCode);
+	
+	@Query("SELECT f FROM Friend f " +
+		       "WHERE (f.userA = :sub OR f.userB = :sub) " +
+		       "AND (f.userA = :friendCode OR f.userB = :friendCode) " +
+		       "AND (f.state = 0 OR f.state = 1)")
+	Optional<Friend> isFriend(@Param("sub") Long sub, @Param("friendCode") Long friendCode);
+
 
 }

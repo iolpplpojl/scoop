@@ -115,5 +115,34 @@ public class RESTAPI {
 	       return friends;
 	}
 	
+	@PostMapping("/addfriend")
+		public ResponseEntity<Map<String, String>> addfriend(@RequestBody Map<String, Long> request) {
+		 	Long sub = request.get("sub");
+		 	Long friendCode = request.get("friendCode");
+		 	System.out.println(sub);
+		 	System.out.println(friendCode);
+		 	
+		 	if (sub == friendCode) {
+	            return ResponseEntity.badRequest().body(Map.of("message", "자기 자신의 코드입니다."));
+	        }
+		 	
+	        if (sub == null || friendCode == null) {
+	            return ResponseEntity.badRequest().body(Map.of("message", "유효하지 않은 요청입니다."));
+	        }
+
+	        if (serv.findByIdentifyCode(friendCode)) {
+	        	if(serv.IsFriend(sub, friendCode)) {
+	        		return ResponseEntity.status(404).body(Map.of("message", "이미 친구 요청이 되어 있습니다."));
+	        	}
+	        	
+	            serv.addFriend(sub, friendCode);
+	            return ResponseEntity.ok(Map.of("message", "친구 추가 성공"));
+	            
+	        } else {
+	            return ResponseEntity.status(404).body(Map.of("message", "친구 코드가 존재하지 않습니다."));
+	        }
+		 		
+	}
+	
 }
 
