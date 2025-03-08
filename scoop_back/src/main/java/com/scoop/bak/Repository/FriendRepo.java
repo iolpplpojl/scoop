@@ -21,5 +21,8 @@ public interface FriendRepo extends JpaRepository<Friend, Long> {
 		       "AND (f.state = 0 OR f.state = 1)")
 	Optional<Friend> isFriend(@Param("sub") Long sub, @Param("friendCode") Long friendCode);
 
+	@Query("SELECT userA FROM Friend f WHERE f.userB = :identifyCode AND f.state = 0")
+	List<Long> findRequestFriendsByUserB(@Param("identifyCode") Long identifyCode);
+
 
 }

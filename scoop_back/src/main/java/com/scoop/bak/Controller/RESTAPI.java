@@ -32,7 +32,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //
 @RequestMapping("/api")
 @RestController
-@CrossOrigin(origins = "http://172.16.17.63:3000") // 프론트엔드 주소 허용
+@CrossOrigin(origins = "http://192.168.0.89:3000") // 프론트엔드 주소 허용
 public class RESTAPI {
 	
 	Service serv;
@@ -127,6 +127,14 @@ public class RESTAPI {
 	       System.out.println("받은 sub 값: " + sub);  // sub 값 확인
 	       List<FriendDTO> friends = serv.findFriendsBySub(sub);
 	       return friends;
+	}
+	
+	@PostMapping("/requestfriends")
+	public List<FriendDTO> requestfriends(@RequestBody Map<String, Long> request){
+		Long sub = request.get("sub");  // JSON에서 sub 값 추출
+		System.out.println("받은 sub 값: " + sub);  // sub 값 확인
+		List<FriendDTO> acceptfriends = serv.findRequestFriendsBySub(sub);
+		return acceptfriends;
 	}
 	
 	@PostMapping("/addfriend")

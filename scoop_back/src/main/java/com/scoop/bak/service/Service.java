@@ -124,7 +124,18 @@ public List<FriendDTO> findFriendsBySub(Long sub) {
             users.add(new FriendDTO(user.getId(), user.getNickname()));
         }
     }
-    return new ArrayList<>(users); // Set을 List로 변환하여 반환
+    return users;
+}
+
+public List<FriendDTO> findRequestFriendsBySub(Long sub) {
+	List<Long> requestfriends = repo_friend.findRequestFriendsByUserB(sub);
+	List<FriendDTO> users = new ArrayList<>();
+	for (Long requestfriend : requestfriends) {
+		User user;
+		user = repo_user.findById(requestfriend).orElse(null);
+		users.add(new FriendDTO(user.getId(), user.getNickname()));
+	}
+	return users;
 }
 
 
@@ -146,5 +157,6 @@ public boolean findByIdentifyCode(Long friendCode) {
 public boolean IsFriend(Long sub, Long friendCode) {
 	return repo_friend.isFriend(sub, friendCode).isPresent();
 }
+
 
 }
