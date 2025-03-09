@@ -121,7 +121,7 @@ public List<FriendDTO> findFriendsBySub(Long sub) {
         }
 
         if (user != null) {
-            users.add(new FriendDTO(user.getId(), user.getNickname()));
+            users.add(new FriendDTO(user.getIdentifyCode() ,user.getId(), user.getNickname()));
         }
     }
     return users;
@@ -133,7 +133,7 @@ public List<FriendDTO> findRequestFriendsBySub(Long sub) {
 	for (Long requestfriend : requestfriends) {
 		User user;
 		user = repo_user.findById(requestfriend).orElse(null);
-		users.add(new FriendDTO(user.getId(), user.getNickname()));
+		users.add(new FriendDTO(user.getIdentifyCode(), user.getId(), user.getNickname()));
 	}
 	return users;
 }

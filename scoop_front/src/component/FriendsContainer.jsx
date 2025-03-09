@@ -24,7 +24,7 @@ function getSubFromLoginToken() {
 export function FriendsContainer() {
   const REST = process.env.REACT_APP_RESTURL;
 
-  const [friendsData, setFriendsData] = useState(null);
+  const [friendsData, setFriendsData] = useState(null); // 처음에는 `null` (아무것도 표시 X)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -35,7 +35,7 @@ export function FriendsContainer() {
       return;
     }
   
-    console.log("sub 값:", sub);  // sub 값 확인
+    console.log("sub 값:", sub); // sub 값 확인
   
     setLoading(true);
     setError(null);
@@ -55,7 +55,7 @@ export function FriendsContainer() {
         return res.json();
       })
       .then((data) => {
-        setFriendsData(data);
+        setFriendsData(data.length > 0 ? data : []); // 데이터가 있으면 저장, 없으면 빈 배열
         setLoading(false);
       })
       .catch((err) => {
@@ -64,17 +64,27 @@ export function FriendsContainer() {
         setLoading(false);
       });
   };
-  
-  
 
   return (
     <div className="friends-container">
-      <h3>친구 목록</h3>
+      <h3>친구요청 목록</h3>
       <button onClick={fetchFriendsData}>친구 목록 가져오기</button>
+      
       {loading && <p>데이터 로딩 중...</p>}
       {error && <p>에러 발생: {error}</p>}
-      {friendsData && (
-        <pre>{JSON.stringify(friendsData, null, 2)}</pre>
+
+      {friendsData !== null && (
+        friendsData.length > 0 ? (
+          <ul>
+            {friendsData.map((friend, index) => (
+              <li key={index}>
+                <strong>식별코드:</strong> {friend.identifyCode} | <strong>아이디:</strong> {friend.username} | <strong>닉네임:</strong> {friend.nickname}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>친구가 없습니다.</p> // 요청 후, 리스트가 비어있을 때만 표시
+        )
       )}
     </div>
   );

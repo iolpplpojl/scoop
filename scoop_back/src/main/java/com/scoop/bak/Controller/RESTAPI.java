@@ -32,7 +32,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //
 @RequestMapping("/api")
 @RestController
-@CrossOrigin(origins = "http://192.168.0.89:3000") // 프론트엔드 주소 허용
+@CrossOrigin(origins = "http://125.129.79.147:3000") // 프론트엔드 주소 허용
 public class RESTAPI {
 	
 	Service serv;
@@ -138,33 +138,44 @@ public class RESTAPI {
 	}
 	
 	@PostMapping("/addfriend")
-		public ResponseEntity<Map<String, String>> addfriend(@RequestBody Map<String, Long> request) {
-		 	Long sub = request.get("sub");
-		 	Long friendCode = request.get("friendCode");
-		 	System.out.println(sub);
-		 	System.out.println(friendCode);
+	public ResponseEntity<Map<String, String>> addfriend(@RequestBody Map<String, Long> request) {
+		 Long sub = request.get("sub");
+		 Long friendCode = request.get("friendCode");
+		 System.out.println(sub);
+		 System.out.println(friendCode);
+		 
+		 if (sub == friendCode) {
+			 return ResponseEntity.badRequest().body(Map.of("message", "자기 자신의 코드입니다."));
+	     }
 		 	
-		 	if (sub == friendCode) {
-	            return ResponseEntity.badRequest().body(Map.of("message", "자기 자신의 코드입니다."));
-	        }
-		 	
-	        if (sub == null || friendCode == null) {
-	            return ResponseEntity.badRequest().body(Map.of("message", "유효하지 않은 요청입니다."));
-	        }
+	     if (sub == null || friendCode == null) {
+	         return ResponseEntity.badRequest().body(Map.of("message", "유효하지 않은 요청입니다."));
+	     }
 
-	        if (serv.findByIdentifyCode(friendCode)) {
-	        	if(serv.IsFriend(sub, friendCode)) {
-	        		return ResponseEntity.status(404).body(Map.of("message", "이미 친구 요청이 되어 있습니다."));
-	        	}
-	        	
-	            serv.addFriend(sub, friendCode);
-	            return ResponseEntity.ok(Map.of("message", "친구 추가 성공"));
-	            
-	        } else {
-	            return ResponseEntity.status(404).body(Map.of("message", "친구 코드가 존재하지 않습니다."));
+	     if (serv.findByIdentifyCode(friendCode)) {
+	        if(serv.IsFriend(sub, friendCode)) {
+	        	return ResponseEntity.status(404).body(Map.of("message", "이미 친구 요청이 되어 있습니다."));
 	        }
+	        	
+	        serv.addFriend(sub, friendCode);
+	        return ResponseEntity.ok(Map.of("message", "친구 추가 성공"));
+	            
+	     } else {
+	        return ResponseEntity.status(404).body(Map.of("message", "친구 코드가 존재하지 않습니다."));
+	     }
 		 		
 	}
 	
+	
+	@PostMapping("/updatefriend")
+	public ResponseEntity<Map<String, String>> updatefriend(@RequestBody Map<String, Long> request) {
+		 Long myCode = request.get("sub");
+		 Long friendCode = request.get("identifyCode");
+		 int status = request.get("status").intValue();
+		 System.out.println(myCode);
+		 System.out.println(friendCode);
+		 System.out.println(status);
+		 return ResponseEntity.ok(Map.of("message", "친구 업데이트 성공"));
+	}
 }
 

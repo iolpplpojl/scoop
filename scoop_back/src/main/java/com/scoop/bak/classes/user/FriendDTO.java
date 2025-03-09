@@ -12,6 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class FriendDTO {
+	private Long identifyCode;
     private String id;
     private String nickname;
 }

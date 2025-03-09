@@ -6,9 +6,9 @@ function getSubFromLoginToken() {
     console.warn("로그인 토큰이 존재하지 않습니다.");
     return "";
   }
-  
+
   try {
-    const parts = token.split('.');
+    const parts = token.split(".");
     if (parts.length !== 3) {
       throw new Error("유효하지 않은 토큰 형식입니다.");
     }
@@ -24,9 +24,10 @@ function getSubFromLoginToken() {
 export function RequestFriends() {
   const REST = process.env.REACT_APP_RESTURL;
 
-  const [friendsData, setFriendsData] = useState(null);
+  const [friendsData, setFriendsData] = useState(null); // 처음에는 `null` (아무것도 표시 X)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [actionLoading, setActionLoading] = useState(false); // 버튼 클릭 중 상태
 
   const fetchFriendsData = () => {
     const sub = getSubFromLoginToken();
@@ -34,17 +35,17 @@ export function RequestFriends() {
       setError("토큰 정보가 없습니다.");
       return;
     }
-  
-    console.log("sub 값:", sub);  // sub 값 확인
-  
+
+    console.log("sub 값:", sub);
+
     setLoading(true);
     setError(null);
     const url = `https://${REST}/api/requestfriends`;
-  
+
     fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ sub }), // JSON으로 sub 값을 전송
     })
@@ -55,7 +56,7 @@ export function RequestFriends() {
         return res.json();
       })
       .then((data) => {
-        setFriendsData(data);
+        setFriendsData(data.length > 0 ? data : []); // 데이터가 있으면 저장, 없으면 빈 배열
         setLoading(false);
       })
       .catch((err) => {
@@ -64,17 +65,78 @@ export function RequestFriends() {
         setLoading(false);
       });
   };
-  
-  
+
+  const handleFriendAction = (identifyCode, status) => {
+    const sub = getSubFromLoginToken();
+    if (!sub) {
+      setError("토큰 정보가 없습니다.");
+      return;
+    }
+
+    setActionLoading(true); // 버튼 클릭 중 상태 설정
+
+    const url = `https://${REST}/api/updatefriend`;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sub, identifyCode, status }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`서버 응답 에러: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then(() => {
+        setActionLoading(false);
+        fetchFriendsData(); // ✅ 요청 성공 후 친구 목록 갱신
+      })
+      .catch((err) => {
+        console.error("친구 요청 처리 실패:", err);
+        setError(err.message);
+        setActionLoading(false);
+      });
+  };
 
   return (
     <div className="friends-container">
       <h3>친구요청 목록</h3>
       <button onClick={fetchFriendsData}>친구요청 목록 가져오기</button>
+
       {loading && <p>데이터 로딩 중...</p>}
       {error && <p>에러 발생: {error}</p>}
-      {friendsData && (
-        <pre>{JSON.stringify(friendsData, null, 2)}</pre>
+
+      {friendsData !== null && (
+        friendsData.length > 0 ? (
+          <ul>
+            {friendsData.map((friend, index) => (
+              <li key={index}>
+                <strong>식별코드:</strong> {friend.identifyCode} |{" "}
+                <strong>아이디:</strong> {friend.id} |{" "}
+                <strong>닉네임:</strong> {friend.nickname}
+                
+                {/* 수락 및 거절 버튼 */}
+                <button
+                  onClick={() => handleFriendAction(friend.identifyCode, 1)}
+                  disabled={actionLoading}
+                >
+                  {actionLoading ? "처리 중..." : "수락"}
+                </button>
+
+                <button
+                  onClick={() => handleFriendAction(friend.identifyCode, -1)}
+                  disabled={actionLoading}
+                >
+                  {actionLoading ? "처리 중..." : "거절"}
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>친구 요청이 없습니다.</p>
+        )
       )}
     </div>
   );
