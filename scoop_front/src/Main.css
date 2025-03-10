@@ -10,6 +10,9 @@
 
   }
   
+.chatmessage:hover{
+  background-color: #282c34;
+}
 .scroll{
   height: 100vh;
   overflow: auto; /* 스크롤 가능하게 */
