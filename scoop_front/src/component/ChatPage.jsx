@@ -1,13 +1,15 @@
 import { useContext, useEffect, useInsertionEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { Context, useWebSocket } from "../Connector";
+import { Chat } from "../objects/chat";
 
 
 export function ChatPage(props){
     const {id} = useParams();
     const {sendMessage,sendRegister,Sub,setReceived,messageQueue} = useContext(Context);
-
+    const [chats,setChats] = useState([]);
     const [msg, setMsg] = useState("");
+
     const sendHandle = () => {
         sendMessage(msg, id);
         setMsg("");
@@ -15,17 +17,11 @@ export function ChatPage(props){
 
     function setChat() {
         console.log("메세징");
-        let temp = document.querySelector("#chatset");
-        temp.innerHTML = "";
+        setChats([]);
         if(messageQueue[id] !== undefined){
-            console.log(messageQueue[id]);
-            messageQueue[id].slice().reverse().forEach(element => {
-                console.log(element);
-
-                let elem = document.createElement("li");
-                elem.innerHTML = `<b>${element['writer']}</b> : ${element['message']}`
-                temp.appendChild(elem);
-            });
+            if (messageQueue[id] !== undefined) {
+                setChats(messageQueue[id].slice().reverse());
+            }
             let top = document.querySelector(".OutputChat ul");
             top.scrollTop = top.scrollHeight;
 
@@ -55,9 +51,9 @@ export function ChatPage(props){
         <div class="Channel">
         <div class="OutputChat">
             <ul id="chatset">
-                <li>This is a Sample. a </li>
-                <li>This is a Sample. a </li>
-                <li>{id} is channel number;</li>
+                {chats.map((ele, idx) => (
+                    <Chat key={idx} name={ele['writer']} text={ele['message']}></Chat>
+                ))}
             </ul>
          </div>
          <div class="InputChat">
