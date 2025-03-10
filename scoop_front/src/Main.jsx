@@ -4,6 +4,7 @@ import "./Main.css"
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from "./tool/Sidebar";
 import { useWebSocket } from "./Connector";
+import { Chat } from "./objects/chat";
 
 function Main() {
    const [init, setInit]  = useState(false);
@@ -11,6 +12,7 @@ function Main() {
       <div className="App">
         <Sidebar></Sidebar>
         <Outlet/>
+        <Chat></Chat>
       </div>
     );
   }
