@@ -78,7 +78,7 @@ export function FriendsContainer() {
           <ul>
             {friendsData.map((friend, index) => (
               <li key={index}>
-                <strong>식별코드:</strong> {friend.identifyCode} | <strong>아이디:</strong> {friend.username} | <strong>닉네임:</strong> {friend.nickname}
+                <strong>식별코드:</strong> {friend.identifyCode} | <strong>아이디:</strong> {friend.id} | <strong>닉네임:</strong> {friend.nickname}
               </li>
             ))}
           </ul>

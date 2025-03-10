@@ -154,8 +154,20 @@ public boolean findByIdentifyCode(Long friendCode) {
 }
 
 
-public boolean IsFriend(Long sub, Long friendCode) {
-	return repo_friend.isFriend(sub, friendCode).isPresent();
+public Friend IsFriend(Long sub, Long friendCode) {
+	return repo_friend.isFriend(sub, friendCode).orElse(null);
+}
+
+
+public int updateFriend(Long myCode, Long friendCode, int state) {
+	return repo_friend.updateFriend(myCode,friendCode, state);
+	
+}
+
+
+public int deleteFriend(Long sub, Long friendCode) {
+	return repo_friend.deleteFriend(sub, friendCode);
+	
 }
 
 

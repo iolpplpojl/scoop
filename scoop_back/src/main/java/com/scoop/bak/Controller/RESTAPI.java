@@ -32,7 +32,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //
 @RequestMapping("/api")
 @RestController
-@CrossOrigin(origins = "http://125.129.79.147:3000") // 프론트엔드 주소 허용
+@CrossOrigin(origins = "http://192.168.0.89:3000") // 프론트엔드 주소 허용
 public class RESTAPI {
 	
 	Service serv;
@@ -141,8 +141,6 @@ public class RESTAPI {
 	public ResponseEntity<Map<String, String>> addfriend(@RequestBody Map<String, Long> request) {
 		 Long sub = request.get("sub");
 		 Long friendCode = request.get("friendCode");
-		 System.out.println(sub);
-		 System.out.println(friendCode);
 		 
 		 if (sub == friendCode) {
 			 return ResponseEntity.badRequest().body(Map.of("message", "자기 자신의 코드입니다."));
@@ -151,12 +149,28 @@ public class RESTAPI {
 	     if (sub == null || friendCode == null) {
 	         return ResponseEntity.badRequest().body(Map.of("message", "유효하지 않은 요청입니다."));
 	     }
-
+	     
+	     Friend isFriend = serv.IsFriend(sub, friendCode);
+	     
 	     if (serv.findByIdentifyCode(friendCode)) {
-	        if(serv.IsFriend(sub, friendCode)) {
-	        	return ResponseEntity.status(404).body(Map.of("message", "이미 친구 요청이 되어 있습니다."));
-	        }
-	        	
+	    	if(isFriend != null) {
+	    		int state = isFriend.getState();// 거절 후 수락 중복처리 막기위해서 생성해놨음
+	    		if(state == 0 || state == 1) {
+		        	return ResponseEntity.status(404).body(Map.of("message", "이미 친구 요청이 되어 있습니다."));
+				}
+		        if(state == -1) {
+		        	int update = serv.updateFriend(friendCode, sub, 0); // 거절당한 사람이 또 걸었을 때
+		        	if(update == 0 ) {
+		        		// 거절한 사람이 다시 걸 경우 만드는거 필요함! 이경우에는 updatefriend를 사용하면 건 사람이 요청도 받을수 있게 되므로
+		        		// friendCode, sub 행을 지우고 serv.addFriend 를 하면 될 거 같음!
+		        		// delete 필요 
+		        		serv.deleteFriend(friendCode, sub);
+		        		serv.addFriend(sub, friendCode);
+		        	}
+		        	return ResponseEntity.ok(Map.of("message", "친구 추가 성공"));
+		        }
+	
+	    	}	
 	        serv.addFriend(sub, friendCode);
 	        return ResponseEntity.ok(Map.of("message", "친구 추가 성공"));
 	            
@@ -171,11 +185,22 @@ public class RESTAPI {
 	public ResponseEntity<Map<String, String>> updatefriend(@RequestBody Map<String, Long> request) {
 		 Long myCode = request.get("sub");
 		 Long friendCode = request.get("identifyCode");
-		 int status = request.get("status").intValue();
-		 System.out.println(myCode);
-		 System.out.println(friendCode);
-		 System.out.println(status);
-		 return ResponseEntity.ok(Map.of("message", "친구 업데이트 성공"));
+		 int state = request.get("state").intValue();
+		 System.out.println("나의코드 " + myCode);
+		 System.out.println("친구코드 " + friendCode);
+		 System.out.println("변경할 상태 " + state);
+		 
+		 if(myCode == null || friendCode == null || !(state==1 || state == -1)) {
+			 return ResponseEntity.status(404).body(Map.of("message", "오류 발생"));
+		 }
+		 
+		 int result = serv.updateFriend(myCode, friendCode, state);
+		 System.out.println(result);
+		 if(result != 0) {
+			 return ResponseEntity.ok(Map.of("message", "친구 업데이트 성공"));
+		 }
+		 
+		 return ResponseEntity.status(404).body(Map.of("message", "오류 발생"));
 	}
 }
 
