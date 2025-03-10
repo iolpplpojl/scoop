@@ -11,8 +11,8 @@
         const [messageQueue, setMessageQueue] = useState({});
         const [accessToken, setAccessToken] = useState({});    
         const [wsConnected, setWsConnected] = useState(false);
-        
         const [subChannel, setSubChannel] = useState({});
+        const [userName,setUserName] = useState("");
         const socRef = useRef();
         
         useEffect(() => {
@@ -44,6 +44,7 @@
         const ConnectWs = () => {
             console.log(accessToken + "토큰");
             console.log(JSON.stringify(accessToken));
+            console.log(accessToken.name);
             if(wsConnected !== true && JSON.stringify(accessToken) !== "{}")
             {
                 socRef.current = new WebSocket(`wss://${REST}/gateway`);
@@ -54,7 +55,7 @@
                 setWsConnected(true);
                 socRef.current.send(JSON.stringify({
                     "type" : "ENTER_APP",
-                    "writer" : "admin", // accessToken의 변수가 들어갈 자리
+                    "writer" : accessToken.name, // accessToken의 변수가 들어갈 자리
                     "text" : "Connected",
                 }));
             }
@@ -95,7 +96,7 @@
         
                 socRef.current.send(JSON.stringify({
                     "type" : "RECEIVED",
-                    "writer" : "admin",
+                    "writer" : accessToken.name,
                 }))
             }   
             socRef.current.onclose = () => {
@@ -189,7 +190,7 @@
                 socRef.current.send(JSON.stringify({
                     "type" : "ENTER_CHANNEL",
                     "channel_id" : id,
-                    "writer" : "admin",
+                    "writer" : accessToken.name,
                 }))        
                 }
             }
@@ -197,7 +198,7 @@
                 socRef.current.send(JSON.stringify({
                     "type" : "SEND_MESSAGE",
                     "channel_id" : id,
-                    "writer" : "admin",
+                    "writer" : accessToken.name,
                     "text" : Message
                 }))            
             }

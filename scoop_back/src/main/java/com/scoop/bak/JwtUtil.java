@@ -99,9 +99,9 @@ public class JwtUtil {
     
     
     //엑세스 토큰 생성
-    public String genAccesToken(String id) {
+    public String genAccesToken(String id,String name) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("tempcode", UUID.randomUUID());
+        claims.put("name", name);
         claims.put("logged-in", LocalDateTime.now().toString());
     	
     	 return Jwts.builder()

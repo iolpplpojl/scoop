@@ -10,6 +10,16 @@
 
   }
   
+  .chatmessage{
+    width: 100%;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .chatmessage img{
+    margin-right: 0.8rem;
+  }
 .chatmessage:hover{
   background-color: #282c34;
 }
@@ -31,6 +41,8 @@
   flex-shrink: 0;
 }
 .OutputChat ul{
+  margin: 0;
+  padding: 1rem;
   overflow-y:auto;
   overflow-x:hidden;
   height: 95%;

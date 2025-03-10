@@ -80,7 +80,7 @@ public String extractSub(Cookie coo) {
 }
 
 public String genAccessToken(User mem) {
-	 return jwt.genAccesToken(mem.getIdentifyCode().toString());
+	 return jwt.genAccesToken(mem.getIdentifyCode().toString(),mem.getNickname());
 }	
 public String genRefreshToken(User mem) {
 	return jwt.genRefreshToken(mem);
