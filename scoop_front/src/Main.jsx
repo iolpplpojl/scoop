@@ -12,7 +12,6 @@ function Main() {
       <div className="App">
         <Sidebar></Sidebar>
         <Outlet/>
-        <Chat></Chat>
       </div>
     );
   }
