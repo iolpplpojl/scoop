@@ -47,6 +47,7 @@
             if(wsConnected !== true && JSON.stringify(accessToken) !== "{}")
             {
                 socRef.current = new WebSocket(`wss://${REST}/gateway`);
+
                 socRef.current.onopen = () => {
                 console.log(accessToken);
                 console.log(socRef.current.readyState);
@@ -184,11 +185,13 @@
             }
             
             const sendRegister = (id) => {
+                if(socRef.current){
                 socRef.current.send(JSON.stringify({
                     "type" : "ENTER_CHANNEL",
                     "channel_id" : id,
                     "writer" : "admin",
                 }))        
+                }
             }
             const sendMessage = (Message, id) => {
                 socRef.current.send(JSON.stringify({
@@ -223,7 +226,7 @@
             return
          };
         return (
-            <Context.Provider value={{sendMessage,sendRegister,Sub,unSub,setReceived,messageQueue}}>
+            <Context.Provider value={{sendMessage,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected}}>
                     {children}
             </Context.Provider>
         )

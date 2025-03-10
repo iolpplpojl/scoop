@@ -6,7 +6,7 @@ import { Chat } from "../objects/chat";
 
 export function ChatPage(props){
     const {id} = useParams();
-    const {sendMessage,sendRegister,Sub,setReceived,messageQueue} = useContext(Context);
+    const {sendMessage,sendRegister,Sub,setReceived,messageQueue,wsConnected} = useContext(Context);
     const [chats,setChats] = useState([]);
     const [msg, setMsg] = useState("");
 
@@ -24,7 +24,6 @@ export function ChatPage(props){
             }
             let top = document.querySelector(".OutputChat ul");
             top.scrollTop = top.scrollHeight;
-
         }
     }
     useEffect(() => {
@@ -36,7 +35,7 @@ export function ChatPage(props){
         setReceived(id);
         setChat();
         console.log(id + "로 이동함");
-    },[id]);
+    },[id,wsConnected]);
 
 
     const activeEnter = (e) => {
