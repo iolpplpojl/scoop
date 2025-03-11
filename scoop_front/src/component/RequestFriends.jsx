@@ -1,25 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-function getSubFromLoginToken() {
-  const token = localStorage.getItem("logintoken");
-  if (!token) {
-    console.warn("로그인 토큰이 존재하지 않습니다.");
-    return "";
-  }
-
-  try {
-    const parts = token.split(".");
-    if (parts.length !== 3) {
-      throw new Error("유효하지 않은 토큰 형식입니다.");
-    }
-    const payload = parts[1];
-    const decodedPayload = JSON.parse(atob(payload));
-    return decodedPayload.sub || "";
-  } catch (error) {
-    console.error("토큰 파싱 중 오류 발생:", error);
-    return "";
-  }
-}
+import { getSubFromLoginToken } from "../util/GetSubByLogintoken"; 
 
 export function RequestFriends() {
   const REST = process.env.REACT_APP_RESTURL;
@@ -29,7 +9,7 @@ export function RequestFriends() {
   const [pendingActions, setPendingActions] = useState({});
 
   const fetchFriendsData = () => {
-    setFriendsData(null);  // ✅ 기존 데이터 초기화 (중복 방지)
+    setFriendsData(null);
     const sub = getSubFromLoginToken();
     if (!sub) {
       setError("토큰 정보가 없습니다.");
@@ -42,9 +22,7 @@ export function RequestFriends() {
 
     fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sub }),
     })
       .then((res) => res.ok ? res.json() : Promise.reject(`서버 응답 에러: ${res.status}`))
@@ -109,8 +87,8 @@ export function RequestFriends() {
           new Map(friendsData.map((friend) => [friend.identifyCode, friend])).values()
         ).map((friend) => (
           <li key={friend.identifyCode}>
-            <strong>식별코드:</strong> {friend.identifyCode} |{" "}
-            <strong>아이디:</strong> {friend.id} |{" "}
+            <strong>식별코드:</strong> {friend.identifyCode} | 
+            <strong>아이디:</strong> {friend.id} | 
             <strong>닉네임:</strong> {friend.nickname}
             
             <button 

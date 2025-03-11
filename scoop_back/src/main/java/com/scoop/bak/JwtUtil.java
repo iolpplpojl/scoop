@@ -1,20 +1,13 @@
 package com.scoop.bak;
 
-import java.beans.JavaBean;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.user.User;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;

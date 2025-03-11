@@ -2,15 +2,11 @@ package com.scoop.bak.service;
 
 import java.util.Optional;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.MemberRepo;
@@ -31,6 +27,7 @@ public class Service implements UserDetailsService{
  
  @Autowired
  private FriendRepo repo_friend;
+ 
  JwtUtil jwt;
 
  public MemberRes loadMemberByUserId( String i) {

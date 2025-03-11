@@ -3,7 +3,7 @@
 
 export function Chat(props){
     function handleClick() {
-        alert('event');
+        alert(props.name);
     }
     return(
         <li onClick={handleClick} className="chatmessage">
