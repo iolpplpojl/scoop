@@ -14,8 +14,8 @@ export function Sidebar() {
       <button onClick={() => setIsPopupOpen(true)}>친구 추가</button>
       {isPopupOpen && <AddFriend onClose={() => setIsPopupOpen(false)} />}
       <RequestFriends />
-      <ClickContainer name="test" channel="A"></ClickContainer>
-      <ClickContainer name="test2" channel="B"></ClickContainer>
+      <ClickContainer name="test" channel="1"></ClickContainer>
+      <ClickContainer name="test2" channel="2"></ClickContainer>
 
     </div>
   );

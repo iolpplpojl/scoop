@@ -14,9 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.MemberRepo;
+import com.scoop.bak.Repository.MessageRepo;
 import com.scoop.bak.Repository.UserRepo;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
+import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.FriendDTO;
@@ -28,11 +30,30 @@ import jakarta.servlet.http.Cookie;
 public class Service implements UserDetailsService{
  private MemberRepo repo;
  private UserRepo repo_user;
+ private MessageRepo repo_mes;
  
  @Autowired
  private FriendRepo repo_friend;
  JwtUtil jwt;
 
+ 
+ 
+ /** 
+  * 채팅 입력
+  * -> 저장
+  * 채팅 불러오기 
+  * -> 페이지 시작 시 (구독 시) -> serv에서 메시지 로딩 -> JSON묶음 return -> 프론트엔드에서 받아서 저장 -> 과정 완료 이전까지 채팅 입력 금지   
+  */
+ 
+ 
+ 
+ public List<Message> loadMessageByChatRoomId(String id){
+	 Long room = Long.parseLong(id);
+	 List<Message> msg = repo_mes.findByChatroomID(room);
+	 
+	 return msg;
+ }
+ 
  public MemberRes loadMemberByUserId( String i) {
 	 MemberRes mem  = repo.findByUserId(i).orElse(null);
 	 return mem;
@@ -49,14 +70,23 @@ public class Service implements UserDetailsService{
 	 return u;
  }
  
+ 
+ 
+ 
  @Autowired
- public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2) {
+ public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2, MessageRepo rep3) {
+	 repo_mes = rep3;
 	 repo_user = rep2;
 	 repo = rep;
 	 jwt = jw;
 	  System.out.println(repo);
  }
 
+ 
+ 
+ 
+ 
+ 
 @Override
 public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 	// TODO Auto-generated method stub
