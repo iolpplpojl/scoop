@@ -63,18 +63,22 @@
             function onMessage(msg){
                 setMessageQueue((prev) => 
                     {
-                        const { writer, channel, text: message } = JSON.parse(msg);
-                        console.log(msg.writer + 'zz' + writer + channel  + message);
+                        console.log(msg);
+                        const data = JSON.parse(msg);
+                        let channel = data.chatroomID;
+                        let writer = data.userName;
+                        let message = data.text;
+                        console.log(msg.userName + 'zz' + writer + channel  + message);
                         if(prev[channel])
                         {
                             console.log("메세지 채널 큐 있음" + channel)
                             return { ...prev,
-                                [channel] : [ ...prev[channel], {writer,message}]
+                                [channel] : [ ...prev[channel], data]
                             }   
                         }
                         else{
                             return { ...prev,
-                                    [channel] : [{writer,message}]
+                                    [channel] : [data]
                             }
                         }
                         //return {[message.data["channel"]] : message.data};
@@ -188,14 +192,39 @@
             
             const sendRegister = (id) => {
                 if(socRef.current){
-                socRef.current.send(JSON.stringify({
-                    "type" : "ENTER_CHANNEL",
-                    "channel_id" : id,
-                    "writer" : accessToken.name,
-                }))        
+                    socRef.current.send(JSON.stringify({
+                        "type" : "ENTER_CHANNEL",
+                        "channel_id" : id,
+                        "writer" : accessToken.name,
+                    }))
+                    axios(`https://${REST}/api/getmessage`, {
+                        method : "post",
+                        params : {
+                            id: id,
+                        },
+                        withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
+                    }).then((res) => { 
+                            console.log(res);
+                            setMessageQueue((prev) => 
+                                {
+                                    let data = res.data;
+                                    return { ...prev,
+                                            [id] : res.data
+                                    }
+                                    
+                                    //return {[message.data["channel"]] : message.data};
+
+                                }
+                            );
+                            return;
+                    }).catch((err) => { 
+                            console.log(err);
+                            return;
+                    });
                 }
             }
             const sendMessage = (Message, id) => {
+                console.log(accessToken.sub);
                 socRef.current.send(JSON.stringify({
                     "type" : "SEND_MESSAGE",
                     "channel_id" : id,

@@ -15,6 +15,7 @@ import com.scoop.bak.Repository.UserRepo;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
 import com.scoop.bak.classes.chat.Message;
+import com.scoop.bak.classes.chat.MessageDTO;
 import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.FriendDTO;
@@ -44,11 +45,15 @@ public class Service implements UserDetailsService{
  
  
  
- public List<Message> loadMessageByChatRoomId(String id){
+ public List<MessageDTO> loadMessageByChatRoomId(String id){
 	 Long room = Long.parseLong(id);
 	 List<Message> msg = repo_mes.findByChatroomID(room);
 	 
-	 return msg;
+	 List<MessageDTO> dto =new ArrayList<>();
+	 for(Message m : msg) {
+		 dto.add(new MessageDTO(m.getId(),m.getUserID(),m.getChatroomID(),m.getText(),m.getDate(), repo_user.findById(m.getUserID()).orElse(null).getNickname()));
+	 }
+	 return dto;
  }
  
  public MemberRes loadMemberByUserId( String i) {

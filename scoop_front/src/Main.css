@@ -9,7 +9,10 @@
     color: white;
 
   }
-  
+  .date{
+    margin-left: 1rem;
+    font-size: xx-small;
+  }
   .chatmessage{
     width: 100%;
     padding: 0;

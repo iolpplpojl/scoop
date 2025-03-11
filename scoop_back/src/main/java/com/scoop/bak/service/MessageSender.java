@@ -13,7 +13,9 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.scoop.bak.classes.chat.Message;
+import com.scoop.bak.classes.chat.MessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.scoop.bak.Repository.MessageRepo;
 import com.scoop.bak.classes.Channel;
 import com.scoop.bak.classes.TestMessage;
@@ -33,16 +35,17 @@ public class MessageSender {
 	MessageSender(){
 		chan1 = new Channel();
 		chan2 = new Channel();
+		objectMapper.registerModule(new JavaTimeModule());
 	}
 	
 	public void Register(String channel, WebSocketSession s) {
 		switch (channel) {
-		case "A": 
+		case "1": 
 			if(!chan1.getSubmembers().contains(s)) {
 				chan1.getSubmembers().add(s);
 			}
 			break;
-		case "B":
+		case "2":
 			if(!chan2.getSubmembers().contains(s)) {
 				chan2.getSubmembers().add(s);
 			}
@@ -54,7 +57,9 @@ public class MessageSender {
     ObjectMapper objectMapper = new ObjectMapper();
 
 	public void Send(String Writer,String channel, String Message, String UserId) throws IOException {
-        String jsonMessage = objectMapper.writeValueAsString(new TestMessage(Writer,channel,Message));
+		
+		LocalDateTime time = LocalDateTime.now();
+        String jsonMessage = objectMapper.writeValueAsString(new MessageDTO(null,Long.parseLong(UserId),Long.parseLong(channel),Message,time,Writer));
         System.out.println(jsonMessage);
 		ArrayList<WebSocketSession> soc;
 		switch (channel) {
@@ -77,6 +82,6 @@ public class MessageSender {
 		
 		
 		Message msg = new Message(null,Long.parseLong(UserId),Long.parseLong(channel),Message,LocalDateTime.now());
-		repo.save(null)
+		repo.save(msg);
 	}
 }

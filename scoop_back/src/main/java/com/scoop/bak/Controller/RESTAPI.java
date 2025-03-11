@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.chat.Message;
+import com.scoop.bak.classes.chat.MessageDTO;
 import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.FriendDTO;
@@ -122,8 +123,9 @@ public class RESTAPI {
 
 	
 	@PostMapping("/getmessage")
-	public List<Message> getMessage(@RequestParam("id") String id){
-		List<Message> msg = serv.loadMessageByChatRoomId(id);
+	public List<MessageDTO> getMessage(@RequestParam("id") String id){
+		List<MessageDTO> msg = serv.loadMessageByChatRoomId(id);
+		System.out.println(msg.toString());
 		
 		return msg;
 	}
