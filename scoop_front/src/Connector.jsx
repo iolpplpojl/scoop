@@ -57,6 +57,7 @@
                     "type" : "ENTER_APP",
                     "writer" : accessToken.name, // accessToken의 변수가 들어갈 자리
                     "text" : "Connected",
+                    
                 }));
             }
             function onMessage(msg){
@@ -199,7 +200,8 @@
                     "type" : "SEND_MESSAGE",
                     "channel_id" : id,
                     "writer" : accessToken.name,
-                    "text" : Message
+                    "text" : Message,
+                    "userId" : accessToken.sub
                 }))            
             }
                                     // 채널 , 유저 

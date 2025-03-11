@@ -12,6 +12,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scoop.bak.Repository.MessageRepo;
 import com.scoop.bak.classes.TestMessage;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,9 @@ public class SocketHandler implements WebSocketHandler {
 	
 	@Autowired
 	MessageSender sender;
+	
+	
+	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		// TODO Auto-generated method stub
@@ -44,8 +48,7 @@ public class SocketHandler implements WebSocketHandler {
 				sender.Register(jn.get("channel_id").asText(), session);
 				break;
 			case "SEND_MESSAGE":
-				sender.Send(jn.get("writer").asText(),jn.get("channel_id").asText(),jn.get("text").asText());
-				
+				sender.Send(jn.get("writer").asText(),jn.get("channel_id").asText(),jn.get("text").asText(), jn.get("userId").asText());
 				break;
 		}
 	}
