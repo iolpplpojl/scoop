@@ -5,11 +5,13 @@ import { Outlet } from 'react-router-dom';
 import { Sidebar } from "./tool/Sidebar";
 import { useWebSocket } from "./Connector";
 import { Chat } from "./objects/chat";
+import { ServerContainer } from "./component/ServerContainer";
 
 function Main() {
    const [init, setInit]  = useState(false);
     return (
       <div className="App">
+        <ServerContainer></ServerContainer>
         <Sidebar></Sidebar>
         <Outlet/>
       </div>

@@ -19,7 +19,8 @@ root.render(
     <Route path="/register" element={<SignUp/>} />
     <Route path="/" element={<Main />}>
     <Route path="/channel/"></Route>
-    <Route path="/channel/:id" element={
+    <Route path="/channel/:server"></Route>
+    <Route path="/channel/:server/:id" element={
         <ChatPage></ChatPage>
     }>  
     </Route>

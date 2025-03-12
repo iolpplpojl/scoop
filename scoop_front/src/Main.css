@@ -9,6 +9,29 @@
     color: white;
 
   }
+  .serverlist{
+    background-color: #586275;
+  }
+  .server{
+
+    background-color: #586275;
+    margin: 0;
+    padding: 0;
+
+  }
+
+
+  .serverpop{
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+.serverpop:hover{
+  background-color: #282c34;
+}
   .date{
     margin-left: 1rem;
     font-size: xx-small;
