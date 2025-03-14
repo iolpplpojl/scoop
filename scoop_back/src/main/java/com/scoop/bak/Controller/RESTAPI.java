@@ -31,6 +31,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
+
+
+
 //
 @RequestMapping("/api")
 @RestController
@@ -122,15 +126,28 @@ public class RESTAPI {
 	}
 
 	
-	@PostMapping("/getmessage")
+	@PostMapping("/getmessage") 
 	public List<MessageDTO> getMessage(@RequestParam("id") String id){
 		List<MessageDTO> msg = serv.loadMessageByChatRoomId(id);
 		System.out.println(msg.toString());
 		
 		return msg;
+	} 
+	// 현재는 전체 메시지를 불러온다. 후에 메시지가 쌓이면 모든 메시지를 DTO화해서 로딩하게 되어버린다. 
+	//메시지가 만개면 채팅 불러오는 유저마다 만 개의 메소드를 처리해야 한다. 
+	//이 말은 즉 프론트엔드에서 인덱싱을 해서 0~100, 100~200(인덱스 0인 경우 가정) 하는 방식으로 메시지를 불러오는 게 필요하다.
+	// 해당 최적화는 현재는 필요 없으므로 완성 하고도 시간 남으면 하기로.
+
+	
+	
+	@PostMapping("/getchannels")
+	public List<Integer> getChannels(){
+		return null;
 	}
-	
-	
+	// 유저가 로그인 -> 서버를 누름 -> Chatroom select where 서버id =?;
+	// ChatroomDTO 만들어서 ( 이름이랑 아이디, 타입만 있으면 될듯. ) 반환 
+	// 프론트엔드는 받아서 li 생성
+	// 누르면 서버아이디/채널아이디 이런식으로 수행;
 	
 	
 	@PostMapping("/getfriends")

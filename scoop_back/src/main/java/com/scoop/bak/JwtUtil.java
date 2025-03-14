@@ -1,11 +1,13 @@
 package com.scoop.bak;
 
+import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import com.scoop.bak.classes.user.User;
 import io.jsonwebtoken.Claims;
@@ -13,7 +15,9 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class JwtUtil {
@@ -27,8 +31,15 @@ public class JwtUtil {
 
     @Value("${jwt.refreshTokenExpirationTime}")
     private long refreshTokenExpirationTime; // 리프레쉬토큰 유효기간
+    Key key;
+
     
-    
+    @PostConstruct
+    void init() {
+       key = Keys.hmacShaKeyFor(secretKey.getBytes());
+
+    }
+
     //리프레쉬 토큰 생성
     public String genRefreshToken(User mem) {
         Map<String, Object> claims = new HashMap<>();
@@ -41,7 +52,7 @@ public class JwtUtil {
     			 .setSubject(mem.getIdentifyCode().toString())
     			 .setIssuedAt(new Date())
     			 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime))
-    			 .signWith(SignatureAlgorithm.HS256,secretKey)
+    			 .signWith(key, SignatureAlgorithm.HS256)
     			 .compact();
     }	
     
@@ -50,7 +61,7 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
         	JwtParser parse =Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(key)
                     .build();
             String tokenSubject =
                     parse.parseClaimsJws(token)
@@ -74,7 +85,7 @@ public class JwtUtil {
     public String extractSub(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)  // 서명 검증을 위한 키 설정
+                    .setSigningKey(key)  // 서명 검증을 위한 키 설정
                     .build()
                     .parseClaimsJws(token)
                     .getBody();  // Claims 객체 (페이로드 부분)
@@ -90,7 +101,6 @@ public class JwtUtil {
     }
     
     
-    
     //엑세스 토큰 생성
     public String genAccesToken(String id,String name) {
         Map<String, Object> claims = new HashMap<>();
@@ -102,7 +112,7 @@ public class JwtUtil {
     			 .setSubject(id)
     			 .setIssuedAt(new Date())
     			 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpirationTime))
-    			 .signWith(SignatureAlgorithm.HS256,secretKey)
+    			 .signWith(key, SignatureAlgorithm.HS256)
     			 .compact();
     }
 }
