@@ -16,7 +16,7 @@ root.render(
   <Connector>
   <Routes>
     <Route path="/login" element={<Login></Login>}></Route>
-    <Route path="/register" element={<SignUp/>} />
+    <Route path="/register" element={<SignUp></SignUp>}></Route>
     <Route path="/" element={<Main />}>
     <Route path="/channel/"></Route>
     <Route path="/channel/:server"></Route>

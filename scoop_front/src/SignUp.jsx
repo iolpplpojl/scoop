@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ useNavigate 추가
-//import './Signup.css';
+import './SignUp.css';
 import axios from 'axios';
-const SignUp = () => {
+
+
+function SignUp (props) {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -27,7 +29,7 @@ const SignUp = () => {
             })
             .then((res) => {
                 console.log(res);
-                alert("done");
+                alert("회원가입 성공! 환영합니다");
                 navigate("/login");
             }).catch((err) => {
                 console.log(err.response);
@@ -51,6 +53,7 @@ const SignUp = () => {
     */
     
     return (
+        <div id='Signup'>
         <div className="signup-container">
             <h2>회원가입</h2>
             <form onSubmit={handleSubmit}>
@@ -73,6 +76,7 @@ const SignUp = () => {
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
                 <button type="submit" className="submit-btn">회원가입</button>
             </form>
+        </div>
         </div>
     );
 };
