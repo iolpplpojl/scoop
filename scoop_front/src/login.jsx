@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios";
-
+import "./Main.css"
 axios.defaults.withCredentials = true;
 
 export function Login(props){
@@ -10,6 +10,7 @@ export function Login(props){
     const nav = useNavigate();
     const [id,setId] = useState("");
     const [pwd,setPwd] = useState("");
+    const [errorMessage,setErrorMessage] =useState("");
     const handleSubmit = (e) => {
         e.preventDefault();
         doLogin();
@@ -42,18 +43,26 @@ export function Login(props){
         });
         
     }
-    function reGisterform(){
-        nav("/register");
-    }
+    
     return(
-        <div className="Channel">
-        <div className="OutputChat">
+        <div id='Signup'>
+        <div className="signup-container">
+            <h2>로그인</h2>
             <form onSubmit={handleSubmit}>
-                <input id="id" required  value = {id} onChange={(e) => setId(e.target.value)}></input> ID <p></p>
-                <input id="pwd" required value ={pwd} onChange={(e) => setPwd(e.target.value)}></input> PWD <p></p>
-                <button type="submit"> go </button>
+                <div className="input-group">
+                    <label htmlFor="id">아이디</label>
+                    <input id="id" required  value = {id} onChange={(e) => setId(e.target.value)}></input>  <p></p>
+                    </div>
+                <div className="input-group">
+                    <label htmlFor="password">비밀번호</label>
+                    <input id="pwd" required value ={pwd} onChange={(e) => setPwd(e.target.value)}></input>  <p></p>
+                    </div>
+                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                <button type="submit" className="submit-btn">로그인</button>
             </form>
-            <button type="button" onClick={reGisterform}> 회원가입 </button>
+            <a href="/register" className="link-btn">회원가입</a>
+                    <a href="/find-id" className="link-btn">아이디 찾기</a>
+                    <a href="/find-password" className="link-btn">비밀번호 찾기</a>
         </div>
         </div>
     )

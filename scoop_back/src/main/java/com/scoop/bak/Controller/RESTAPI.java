@@ -38,7 +38,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //
 @RequestMapping("/api")
 @RestController
-//@CrossOrigin(origins = "http://192.168.0.82:3000") // 프론트엔드 주소 허용
+//@CrossOrigin(origins = "http://192.168.0.31:3000") // 프론트엔드 주소 허용
 public class RESTAPI {
 	
 	Service serv;

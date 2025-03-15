@@ -1,12 +1,16 @@
 package com.scoop.bak.service;
 
-import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.MemberRepo;
@@ -16,9 +20,9 @@ import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
-import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.FriendDTO;
+import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.User;
 
 import jakarta.servlet.http.Cookie;
@@ -32,6 +36,9 @@ public class Service implements UserDetailsService{
  @Autowired
  private FriendRepo repo_friend;
  
+ @Autowired
+ private PasswordEncoder passwordEncoder;  // BCryptPasswordEncoder 주입
+
  JwtUtil jwt;
 
  
@@ -128,11 +135,12 @@ public boolean registerUser(SignupRequest request) {
     	System.out.println("중복ID");
         return false;
     }
+    // 2. 비밀번호 암호
+    String encodedPassword = passwordEncoder.encode(request.getPwd());  // 비밀번호 암호화
 
-   
     User newUser = new User();
     newUser.setId(request.getId());
-    newUser.setPwd(request.getPwd());
+    newUser.setPwd("{BCrypt}"+encodedPassword);
     newUser.setEmail(request.getEmail());
     newUser.setNickname(request.getNickname());
 
