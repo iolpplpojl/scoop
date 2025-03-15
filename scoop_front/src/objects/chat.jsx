@@ -3,6 +3,7 @@ import { getSubFromLoginToken } from "../util/GetSubByLogintoken";
 import { addFriend } from "../component/AddFriend";
 
 export function Chat(props) {
+    const REST = process.env.REACT_APP_RESTURL;
     const [showMenu, setShowMenu] = useState(false);
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const [isFriend, setIsFriend] = useState(null); // 친구 여부
@@ -15,7 +16,7 @@ export function Chat(props) {
     useEffect(() => {
         if (!userId || !loggedInUserId || String(userId) === String(loggedInUserId)) return;
 
-        fetch(`https://192.168.0.89:9999/api/isfriend?userId=${userId}&myId=${loggedInUserId}`)
+        fetch(`https://${REST}/api/isfriend?userId=${userId}&myId=${loggedInUserId}`)
             .then(response => response.json())
             .then(data => {
                 if (data && (data.state === true || data.state === 1)) {
