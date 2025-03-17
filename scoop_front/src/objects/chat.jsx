@@ -16,7 +16,6 @@ export function Chat(props) {
     // 친구 여부 확인 API 호출 (자기 자신이면 요청 안 보냄)
     useEffect(() => {
         if (!userId || !loggedInUserId || String(userId) === String(loggedInUserId)) return;
-
         fetch(`https://${REST}/api/isfriend?userId=${userId}&myId=${loggedInUserId}`)
             .then(response => response.json())
             .then(data => {

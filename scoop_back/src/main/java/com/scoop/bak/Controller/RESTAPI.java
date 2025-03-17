@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.classes.MemberRes;
+import com.scoop.bak.classes.chat.ChatroomDTO;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
 import com.scoop.bak.classes.user.SignupRequest;
@@ -149,6 +150,16 @@ public class RESTAPI {
 	// 프론트엔드는 받아서 li 생성
 	// 누르면 서버아이디/채널아이디 이런식으로 수행;
 	
+	@GetMapping("/test")
+	public List<ChatroomDTO> test(){
+		return serv.getChannelByServer("2");
+	}
+	
+	@PostMapping("/getchatrooms")
+	public List<ChatroomDTO> getChatrooms(@RequestParam("id") String id){
+		System.out.println(id);
+		return serv.getChannelByServer(id);
+	}
 	
 	@PostMapping("/getfriends")
 	   public List<FriendDTO> getfriends(@RequestBody Map<String, Long> request) {

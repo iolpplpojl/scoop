@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,53 +27,39 @@ import jakarta.servlet.http.HttpSession;
 @Component
 public class MessageSender {
 	
-	public Channel chan1;
-	public Channel chan2;
+	public List<Channel> ch;
 	public Map<String,Channel> chan;
 	
 	@Autowired
 	MessageRepo repo;
 	
 	MessageSender(){
-		chan1 = new Channel();
-		chan2 = new Channel();
+		ch = new ArrayList<>();
+		chan = new HashMap<String, Channel>();
 		objectMapper.registerModule(new JavaTimeModule());
 	}
 	
 	public void Register(String channel, WebSocketSession s) {
-		switch (channel) {
-		case "1": 
-			if(!chan1.getSubmembers().contains(s)) {
-				chan1.getSubmembers().add(s);
-			}
-			break;
-		case "2":
-			if(!chan2.getSubmembers().contains(s)) {
-				chan2.getSubmembers().add(s);
-			}
-			break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: ");
+		if(chan.containsKey(channel)) {
+			if(!chan.get(channel).getSubmembers().contains(s)) {
+				chan.get(channel).getSubmembers().add(s);
+			};
+		}
+		else {
+			chan.put(channel, new Channel());
+			if(!chan.get(channel).getSubmembers().contains(s)) {
+				chan.get(channel).getSubmembers().add(s);
+			};
 		}
 	}
     ObjectMapper objectMapper = new ObjectMapper();
 
 	public void Send(String Writer,String channel, String Message, String UserId) throws IOException {
-		
 		LocalDateTime time = LocalDateTime.now();
         String jsonMessage = objectMapper.writeValueAsString(new MessageDTO(null,Long.parseLong(UserId),Long.parseLong(channel),Message,time,Writer));
         System.out.println(jsonMessage);
 		ArrayList<WebSocketSession> soc;
-		switch (channel) {
-		case "1": 
-			soc = chan1.getSubmembers();
-			break;
-		case "2":
-			soc = chan2.getSubmembers();
-			break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: ");
-		}
+		soc = chan.get(channel).getSubmembers();
 		if(soc != null) {
 			for(WebSocketSession s : soc) {
 				if(s.isOpen()) {

@@ -12,7 +12,6 @@ function Main() {
     return (
       <div className="App">
         <ServerContainer></ServerContainer>
-        <Sidebar></Sidebar>
         <Outlet/>
       </div>
     );

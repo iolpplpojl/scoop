@@ -9,6 +9,7 @@
         const REST = process.env.REACT_APP_RESTURL;
         const nav = useNavigate();
         const [messageQueue, setMessageQueue] = useState({});
+        const [serverQueue, setServerQueue] = useState({});
         const [accessToken, setAccessToken] = useState({});    
         const [wsConnected, setWsConnected] = useState(false);
         const [subChannel, setSubChannel] = useState({});
@@ -253,12 +254,38 @@
                 [channel]: prev[channel]?.filter(cb => cb !== user) || [],
             }));
         };
-
+        const getServerByChannel = (id) => { // 서버 구독
+            if(socRef.current){
+                axios(`https://${REST}/api/getchatrooms`, {
+                    method : "post",
+                    params : {
+                        id: id,
+                    },
+                    withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
+                }).then((res) => { 
+                        console.log(res);
+                        setServerQueue((prev) => 
+                            {
+                                let data = res.data;
+                                return { ...prev,
+                                        [id] : res.data
+                                }
+                                //return {[message.data["channel"]] : message.data};
+                            }
+                        );
+                        return;
+                }).catch((err) => { 
+                        console.log(err);
+                        return;
+                });
+            }
+            return;
+        }
          const setReceived = (id) => {
             return
          };
         return (
-            <Context.Provider value={{sendMessage,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected}}>
+            <Context.Provider value={{sendMessage,getServerByChannel,serverQueue,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected}}>
                     {children}
             </Context.Provider>
         )

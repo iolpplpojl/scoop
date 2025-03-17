@@ -8,12 +8,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.scoop.bak.JwtUtil;
+import com.scoop.bak.Repository.ChatroomRepo;
 import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.MemberRepo;
 import com.scoop.bak.Repository.MessageRepo;
 import com.scoop.bak.Repository.UserRepo;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
+import com.scoop.bak.classes.chat.Chatroom;
+import com.scoop.bak.classes.chat.ChatroomDTO;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
 import com.scoop.bak.classes.user.SignupRequest;
@@ -29,7 +32,7 @@ public class Service implements UserDetailsService{
  private MemberRepo repo;
  private UserRepo repo_user;
  private MessageRepo repo_mes;
- 
+ private ChatroomRepo repo_cha;
  @Autowired
  private FriendRepo repo_friend;
  
@@ -75,12 +78,29 @@ public class Service implements UserDetailsService{
  
  
  
+ public List<ChatroomDTO> getChannelByServer(String Id){
+	 
+	 Long lg = Long.parseLong(Id);
+	 List<Chatroom> room = repo_cha.findChannelsByServerId(lg);
+	List<ChatroomDTO> dto = new ArrayList<>();
+	for(Chatroom r : room) {
+		ChatroomDTO d = new ChatroomDTO();
+		d.setId(r.getId());
+		d.setName(r.getRoomName());
+		d.setPublic(r.isPublic());
+		d.setType(r.getType());
+		dto.add(d);
+		
+	}
+	 return dto;
+ }
  
  @Autowired
- public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2, MessageRepo rep3) {
+ public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2, MessageRepo rep3, ChatroomRepo rep4) {
 	 repo_mes = rep3;
 	 repo_user = rep2;
 	 repo = rep;
+	 repo_cha = rep4;
 	 jwt = jw;
 	  System.out.println(repo);
  }

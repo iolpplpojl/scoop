@@ -50,6 +50,8 @@ public class SocketHandler implements WebSocketHandler {
 			case "SEND_MESSAGE":
 				sender.Send(jn.get("writer").asText(),jn.get("channel_id").asText(),jn.get("text").asText(), jn.get("userId").asText());
 				break;
+			case "SERVER_CHANNEL_ADD":
+				break;
 		}
 	}
 
