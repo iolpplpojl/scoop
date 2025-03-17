@@ -1,6 +1,5 @@
 package com.scoop.bak.Controller;
 
-import java.awt.geom.CubicCurve2D;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,17 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scoop.bak.JwtUtil;
-import com.scoop.bak.classes.MemberRes;
-import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
-import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.FriendDTO;
+import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.User;
 import com.scoop.bak.service.Service;
 
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,15 +44,16 @@ public class RESTAPI {
 	}
 	
 
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestParam("id") String id, @RequestParam("pwd") String pwd, HttpServletResponse res) {
 		System.out.println("id");
 		User mem = serv.loadUserByUserName(id);
 		if(mem == null) {
 			return ResponseEntity.badRequest().body("로그인 처리 실패");
 		}
+		 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		System.out.println(mem.getPwd()  + pwd);
-		if(mem.getPwd().equals(pwd) )
+		if(encoder.matches(pwd, mem.getPwd()))
 		{
 			System.out.println(mem.getId() + "의 로그인 처리 됨");
 			res.addCookie(serv.createCookie(mem));
