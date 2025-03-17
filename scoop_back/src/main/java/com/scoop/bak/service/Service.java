@@ -22,6 +22,7 @@ import com.scoop.bak.classes.user.FriendDTO;
 import com.scoop.bak.classes.user.User;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.transaction.Transactional;
 
 @org.springframework.stereotype.Service
 public class Service implements UserDetailsService{
@@ -201,6 +202,13 @@ public int deleteFriend(Long sub, Long friendCode) {
 	return repo_friend.deleteFriend(sub, friendCode);
 	
 }
+
+@Transactional
+public boolean updateStateFriend(Long userId, Long myId) {
+    int result = repo_friend.updateFriendState(userId, myId);
+    return result == 1; // 업데이트 성공 여부 반환
+}
+
 
 
 }

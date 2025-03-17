@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { getSubFromLoginToken } from "../util/GetSubByLogintoken";
 import { addFriend } from "../component/AddFriend";
+import { deleteFriend } from "../util/DeleteFriend";
 
 export function Chat(props) {
     const REST = process.env.REACT_APP_RESTURL;
@@ -65,7 +66,13 @@ export function Chat(props) {
                     {isFriend ? (
                         <>
                             <button onClick={() => alert("1:1 채팅하기")}>1:1 채팅</button>
-                            <button onClick={() => alert("친구 삭제")}>친구 삭제</button>
+                            <button onClick={async () => {
+                                await deleteFriend(props.userId, loggedInUserId);
+                                setIsFriend(false); // 친구 상태 갱신
+                            }}>
+                                친구 삭제
+                            </button>
+
                         </>
                     ) : (
                         <button onClick={() => addFriend(props.userId)}>친구 추가</button>

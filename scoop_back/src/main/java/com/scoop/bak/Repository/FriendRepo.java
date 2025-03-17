@@ -36,5 +36,10 @@ public interface FriendRepo extends JpaRepository<Friend, Long> {
 	@Query("DELETE FROM Friend f WHERE f.userA = :userA AND f.userB = :userB")
 	int deleteFriend(@Param("userA") Long userA, @Param("userB") Long userB);
 
+	@Modifying
+	@Query("UPDATE Friend f SET f.state = -1 WHERE (f.userA = :userA AND f.userB = :userB) OR (f.userA = :userB AND f.userB = :userA)")
+	int updateFriendState(@Param("userA") Long userA, @Param("userB") Long userB);
+
+
 
 }

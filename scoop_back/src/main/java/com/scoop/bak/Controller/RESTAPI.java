@@ -244,5 +244,18 @@ public class RESTAPI {
 
 		return ResponseEntity.ok(Map.of("state", state));
 	}
+	
+	@PostMapping("delete")
+	public ResponseEntity<Map<String, String>> deleteFriend(@RequestBody Map<String, Long> request) {
+		Long userId = request.get("userId");
+        Long myId = request.get("myId");
+        
+        if (serv.updateStateFriend(userId, myId)) {
+        	return ResponseEntity.ok(Map.of("message", "goooood"));
+        }
+
+        
+        return ResponseEntity.status(404).body(Map.of("message", "오류 발생"));
+	}
 }
 
