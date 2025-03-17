@@ -121,7 +121,13 @@ public class Service implements UserDetailsService{
 public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 	// TODO Auto-generated method stub
 	MemberRes mem  = repo.findByUserId(username).orElseThrow(() -> new UsernameNotFoundException("유저가 없음"));
-	return new MemberResDetails(mem);
+    if (!passwordEncoder.matches(username, mem.getUserPwd())) {
+        throw new UsernameNotFoundException("비밀번호가 일치하지 않습니다.");
+    }
+
+    // 비밀번호가 맞으면 UserDetails 객체 반환
+    return new MemberResDetails(mem);
+
 }
 
 public Cookie createCookie(User mem) {
@@ -161,7 +167,7 @@ public boolean registerUser(SignupRequest request) {
 
     User newUser = new User();
     newUser.setId(request.getId());
-    newUser.setPwd("{BCrypt}"+encodedPassword);
+    newUser.setPwd(encodedPassword);
     newUser.setEmail(request.getEmail());
     newUser.setNickname(request.getNickname());
 

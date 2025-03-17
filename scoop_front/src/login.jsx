@@ -23,7 +23,7 @@ export function Login(props){
         console.log(pwd);
         console.log("doLogin");
         axios(`https://${REST}/api/login`, {
-            method : "get",
+            method : "post",
             params : {
                 id: id,
                 pwd : pwd
@@ -39,7 +39,7 @@ export function Login(props){
         }).catch((err) => {
             
             console.log(err.response);
-            alert("아이디가 안됨! ");
+            setErrorMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
         });
         
     }

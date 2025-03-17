@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ useNavigate 추가
-import './SignUp.css';
+import './Signup.css';
 import axios from 'axios';
 
 
