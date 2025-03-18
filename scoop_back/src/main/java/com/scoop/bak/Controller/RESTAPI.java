@@ -51,6 +51,13 @@ public class RESTAPI {
 	}
 
 	
+	 /** 
+	  * dm으로 포스트 요청이 오면 isExist()를 호출함
+	  * isExist() = 둘간의 채팅방이 존재하면 그냥 원래 있던 방 번호 호출, 없으면 생성하고 번호를 돌려줌. (나중에 UUID로 수정해야 하지만, 지금은 일단 자동증가수 가져오게 함.)
+	  * @param idenId 채팅 시작하는 쪽
+	  * @param to 채팅 받는 쪽
+	  * @return 채팅방 주소를 리턴
+	  */
 	@PostMapping("/dm")
 	public ResponseEntity<?> dm(@RequestParam("id") String idenId, @RequestParam("to") String to)
 	{
