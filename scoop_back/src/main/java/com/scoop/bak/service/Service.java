@@ -6,8 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+//import org.springframework.mail.javamail.JavaMailSender;
+//import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -47,8 +47,8 @@ public class Service implements UserDetailsService{
  @Autowired
  private PasswordEncoder passwordEncoder;  // BCryptPasswordEncoder 주입
  
- @Autowired
- private JavaMailSender mailSender;
+ //@Autowired
+ //private JavaMailSender mailSender;
 
  JwtUtil jwt;
 
@@ -80,8 +80,8 @@ public class Service implements UserDetailsService{
  }
  
  
- public User loadUserByUserName(String i) {
-	 User u = repo_user.findById(i).orElse(null);
+ public User loadUserByEmail(String i) {
+	 User u = repo_user.findByEmail(i).orElse(null);
 	 return u;
  }
  
@@ -164,7 +164,7 @@ public boolean Verify(String token) {
 }
 public boolean registerUser(SignupRequest request) {
     // 1. 중복 검사 (ID 기준)
-    Optional<User> existingUser = repo_user.findById(request.getId());
+    Optional<User> existingUser = repo_user.findByEmail(request.getEmail());
     if (existingUser.isPresent()) {
     	System.out.println("중복ID");
         return false;
@@ -173,7 +173,6 @@ public boolean registerUser(SignupRequest request) {
     String encodedPassword = passwordEncoder.encode(request.getPwd());  // 비밀번호 암호화
 
     User newUser = new User();
-    newUser.setId(request.getId());
     newUser.setPwd(encodedPassword);
     newUser.setEmail(request.getEmail());
     newUser.setNickname(request.getNickname());
@@ -195,7 +194,7 @@ public List<FriendDTO> findFriendsBySub(Long sub) {
         }
 
         if (user != null) {
-            users.add(new FriendDTO(user.getIdentifyCode() ,user.getId(), user.getNickname()));
+            users.add(new FriendDTO(user.getIdentifyCode() ,user.getEmail(), user.getNickname()));
         }
     }
     return users;
@@ -207,7 +206,7 @@ public List<FriendDTO> findRequestFriendsBySub(Long sub) {
 	for (Long requestfriend : requestfriends) {
 		User user;
 		user = repo_user.findById(requestfriend).orElse(null);
-		users.add(new FriendDTO(user.getIdentifyCode(), user.getId(), user.getNickname()));
+		users.add(new FriendDTO(user.getIdentifyCode(), user.getEmail(), user.getNickname()));
 	}
 	return users;
 }
@@ -255,14 +254,14 @@ public boolean updateStateFriend(Long userId, Long myId) {
 public String findId(String email) {
     Optional<User> user = repo_user.findByEmail(email);
     if (user.isPresent()) {
-        sendEmail(email, "아이디 찾기", "당신의 아이디는: " + user.get().getId());
+        sendEmail(email, "아이디 찾기", "당신의 아이디는: " + user.get().getEmail());
         return "이메일로 아이디를 전송했습니다.";
     }
     return "해당 이메일로 등록된 계정이 없습니다.";
 }
 
 public String findPassword(String id, String email) {
-    Optional<User> user = repo_user.findByIdAndEmail(id, email);
+    Optional<User> user = repo_user.findByEmail(email);
     if (user.isPresent()) {
         String resetToken = generateResetToken();
         String resetLink = "http://192.168.0.31/reset-password?token=" + resetToken;

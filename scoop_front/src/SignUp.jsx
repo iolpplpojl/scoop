@@ -18,7 +18,6 @@ function SignUp (props) {
             axios("https://"+REST+'/api/register', {
                 method: 'POST',
                 data: JSON.stringify({
-                    id: id,
                     pwd: password,
                     email: email,
                     nickname: nickname,
@@ -58,16 +57,12 @@ function SignUp (props) {
             <h2>회원가입</h2>
             <form onSubmit={handleSubmit}>
                 <div className="input-group">
-                    <label htmlFor="id">아이디</label>
-                    <input type="text" id="id" value={id} onChange={(e) => setId(e.target.value)} required />
+                    <label htmlFor="email">이메일</label>
+                    <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="input-group">
                     <label htmlFor="password">비밀번호</label>
                     <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="email">이메일</label>
-                    <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="input-group">
                     <label htmlFor="nickname">닉네임</label>

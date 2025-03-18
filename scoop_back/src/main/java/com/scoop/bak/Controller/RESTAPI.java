@@ -50,8 +50,7 @@ public class RESTAPI {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestParam("id") String id, @RequestParam("pwd") String pwd, HttpServletResponse res) {
-		System.out.println("id");
-		User mem = serv.loadUserByUserName(id);
+		User mem = serv.loadUserByEmail(id);
 		if(mem == null) {
 			return ResponseEntity.badRequest().body("로그인 처리 실패");
 		}
@@ -59,7 +58,7 @@ public class RESTAPI {
 		System.out.println(mem.getPwd()  + pwd);
 		if(encoder.matches(pwd, mem.getPwd()))
 		{
-			System.out.println(mem.getId() + "의 로그인 처리 됨");
+			System.out.println(mem.getNickname() + "의 로그인 처리 됨");
 			res.addCookie(serv.createCookie(mem));
 
 	        return ResponseEntity.ok()

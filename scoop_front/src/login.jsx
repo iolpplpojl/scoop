@@ -50,7 +50,7 @@ export function Login(props){
             <h2>로그인</h2>
             <form onSubmit={handleSubmit}>
                 <div className="input-group">
-                    <label htmlFor="id">아이디</label>
+                    <label htmlFor="id">이메일</label>
                     <input id="id" required  value = {id} onChange={(e) => setId(e.target.value)}></input>  
                     <Link href="/find-id" className="link-btn">아이디 찾기</Link>
                     </div>
@@ -63,7 +63,7 @@ export function Login(props){
                 <button type="submit" className="submit-btn">로그인</button>
             </form>
             <div className="under-bar">
-            <p>계정이 없으신가요?<Link href="/register" className="link-btn">회원가입</Link></p>
+            <p>계정이 없으신가요?<Link to="/register" className="link-btn">회원가입</Link></p>
             
             
             </div>

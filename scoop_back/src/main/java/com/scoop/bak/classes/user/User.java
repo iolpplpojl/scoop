@@ -27,13 +27,10 @@ public class User {
 	@Column(name= "identify_code")
 	private Long identifyCode; //식별코드
 	
-	@Column(nullable = false, unique = true)
-	private String id; // id
-	
 	@Column(nullable = false)
 	private String pwd; //pwd
 	
-	@Column(nullable = true)
+	@Column(nullable = false, unique = true)
 	private String email;
 	
 	@Column(nullable = false)
