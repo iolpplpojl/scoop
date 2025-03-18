@@ -227,5 +227,18 @@ public class RESTAPI {
 		 
 		 return ResponseEntity.status(404).body(Map.of("message", "오류 발생"));
 	}
+	
+	@GetMapping("isfriend")
+	public ResponseEntity<Map<String, Boolean>> isfriend(@RequestParam(name = "userId")Long userId, @RequestParam(name = "myId")Long myId) {
+		Boolean state = false;
+		Friend isfriend = serv.IsFriend(userId, myId);
+		if(isfriend != null) {
+			if(isfriend.getState() == 1) {
+				state = true;
+			}
+		};
+
+		return ResponseEntity.ok(Map.of("state", state));
+	}
 }
 

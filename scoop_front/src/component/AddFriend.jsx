@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-function getSubFromLoginToken() {
 
+function getSubFromLoginToken() {
   const token = localStorage.getItem("logintoken");
   if (!token) {
     console.warn("로그인 토큰이 존재하지 않습니다.");
@@ -22,9 +22,10 @@ function getSubFromLoginToken() {
   }
 }
 
-const AddFriend = ({ onClose }) => {
-  const [friendCode, setFriendCode] = useState("");
+const AddFriend = ({ onClose, initialFriendCode }) => {
+  const [friendCode, setFriendCode] = useState(initialFriendCode || "");
   const [error, setError] = useState("");
+  const REST = process.env.REACT_APP_RESTURL;
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -35,16 +36,13 @@ const AddFriend = ({ onClose }) => {
       setError("숫자만 입력 가능합니다.");
     }
   };
-  const REST = process.env.REACT_APP_RESTURL;
 
-  const handleSubmit = () => {
+  const handleSubmit = (friendCodeToSend) => {
     const sub = getSubFromLoginToken();
     if (!sub) {
       setError("로그인 정보가 없습니다.");
       return;
     }
-
-    console.log("📡 서버로 보낼 데이터:", { sub, friendCode });
 
     const url = `https://${REST}/api/addfriend`;
 
@@ -53,7 +51,7 @@ const AddFriend = ({ onClose }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ sub, friendCode }),
+      body: JSON.stringify({ sub, friendCode: friendCodeToSend || friendCode }),
     })
       .then((res) => {
         if (!res.ok) {
@@ -83,10 +81,43 @@ const AddFriend = ({ onClose }) => {
       {error && <p>{error}</p>}
       <div>
         <button onClick={onClose}>취소</button>
-        <button onClick={handleSubmit}>확인</button>
+        <button onClick={() => handleSubmit()}>확인</button>
       </div>
     </div>
   );
+};
+
+// ✅ 외부에서 `userId`를 직접 전달받아 친구 추가할 수 있도록 `addFriend` 함수 추가
+export const addFriend = (userId) => {
+  const sub = getSubFromLoginToken();
+  if (!sub) {
+    alert("로그인 정보가 없습니다.");
+    return;
+  }
+
+  const REST = process.env.REACT_APP_RESTURL;
+  const url = `https://${REST}/api/addfriend`;
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ sub, friendCode: userId }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`서버 응답 에러: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      alert(data.message || "친구 추가 성공!");
+    })
+    .catch((err) => {
+      console.error("❌ 요청 오류:", err);
+      alert(err.message || "오류가 발생했습니다.");
+    });
 };
 
 export default AddFriend;
