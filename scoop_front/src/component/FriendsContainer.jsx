@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { getSubFromLoginToken } from "../util/GetSubByLogintoken"; //로그인 토큰에서 sub값 추출 기능
+import React, { useState, useEffect } from "react";
+import { getSubFromLoginToken } from "../util/GetSubByLogintoken"; // 로그인 토큰에서 sub값 추출 기능
 
 export function FriendsContainer() {
   const REST = process.env.REACT_APP_RESTURL;
@@ -7,6 +7,10 @@ export function FriendsContainer() {
   const [friendsData, setFriendsData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchFriendsData();
+  }, []);
 
   const fetchFriendsData = () => {
     const sub = getSubFromLoginToken();
@@ -48,8 +52,7 @@ export function FriendsContainer() {
   return (
     <div className="friends-container">
       <h3>친구 목록</h3>
-      <button onClick={fetchFriendsData}>친구 목록 가져오기</button>
-      
+
       {loading && <p>데이터 로딩 중...</p>}
       {error && <p>에러 발생: {error}</p>}
 
@@ -71,3 +74,5 @@ export function FriendsContainer() {
     </div>
   );
 }
+
+export default FriendsContainer;

@@ -2,8 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { Server } from "../objects/server";
 import { AddServer } from "../objects/addServer";
 import { Sidebar } from "../tool/Sidebar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../Connector";
+import { FriendsContainer } from "./FriendsContainer";
+import Me from "../objects/Me";
 
 export function ServerContainer() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -11,11 +13,17 @@ export function ServerContainer() {
     const {server} = useParams();
     const {getServerByChannel,serverQueue,wsConnected} = useContext(Context);
     const [seed, setSeed] = useState("");
-    
+    const nav = useNavigate();
+
     useEffect(()=>{
       if(wsConnected){
-        getServerByChannel(server);
-        console.log(server + "asdf1234567");
+        if(!server){
+          nav("channel/@me");
+        }
+        if(server != "@me"){
+          getServerByChannel(server);
+          console.log(server + "asdf1234567");
+        }
       }
     },[server,wsConnected])
 
@@ -38,9 +46,9 @@ export function ServerContainer() {
             </ul>
         </div>
       </div>
-            { (server && server != "@me")? <Sidebar server={serverQueue[server]} seed={seed} wsConnected={wsConnected}></Sidebar> :  null }
-
-      </div>
+            { (server && server != "@me")? <Sidebar server={serverQueue[server]} seed={seed} wsConnected={wsConnected}></Sidebar> 
+            :  <Me></Me>}
+      </div>  
 
     );
   }

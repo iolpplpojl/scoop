@@ -8,6 +8,11 @@ export function RequestFriends() {
   const [error, setError] = useState(null);
   const [pendingActions, setPendingActions] = useState({});
 
+  // ❌ 버튼 없이 자동 실행
+  useEffect(() => {
+    fetchFriendsData();
+  }, []);
+
   const fetchFriendsData = () => {
     setFriendsData(null);
     const sub = getSubFromLoginToken();
@@ -36,10 +41,6 @@ export function RequestFriends() {
         setLoading(false);
       });
   };
-
-  useEffect(() => {
-    fetchFriendsData();
-  }, []);
 
   const handleFriendAction = (identifyCode, state) => {
     const sub = getSubFromLoginToken();
@@ -76,38 +77,39 @@ export function RequestFriends() {
   return (
     <div className="friends-container">
       <h3>친구요청 목록</h3>
-      <button onClick={fetchFriendsData}>친구요청 목록 가져오기</button>
 
       {loading && <p>데이터 로딩 중...</p>}
       {error && <p>에러 발생: {error}</p>}
 
       {friendsData !== null && (
         <ul>
-        {Array.from(
-          new Map(friendsData.map((friend) => [friend.identifyCode, friend])).values()
-        ).map((friend) => (
-          <li key={friend.identifyCode}>
-            <strong>식별코드:</strong> {friend.identifyCode} | 
-            <strong>아이디:</strong> {friend.id} | 
-            <strong>닉네임:</strong> {friend.nickname}
-            
-            <button 
-              onClick={() => handleFriendAction(friend.identifyCode, 1)} 
-              disabled={pendingActions[friend.identifyCode]}
-            >
-              {pendingActions[friend.identifyCode] ? "처리 중..." : "수락"}
-            </button>
-      
-            <button 
-              onClick={() => handleFriendAction(friend.identifyCode, -1)} 
-              disabled={pendingActions[friend.identifyCode]}
-            >
-              {pendingActions[friend.identifyCode] ? "처리 중..." : "거절"}
-            </button>
-          </li>
-        ))}
-      </ul>
+          {Array.from(
+            new Map(friendsData.map((friend) => [friend.identifyCode, friend])).values()
+          ).map((friend) => (
+            <li key={friend.identifyCode}>
+              <strong>식별코드:</strong> {friend.identifyCode} | 
+              <strong>아이디:</strong> {friend.id} | 
+              <strong>닉네임:</strong> {friend.nickname}
+              
+              <button 
+                onClick={() => handleFriendAction(friend.identifyCode, 1)} 
+                disabled={pendingActions[friend.identifyCode]}
+              >
+                {pendingActions[friend.identifyCode] ? "처리 중..." : "수락"}
+              </button>
+        
+              <button 
+                onClick={() => handleFriendAction(friend.identifyCode, -1)} 
+                disabled={pendingActions[friend.identifyCode]}
+              >
+                {pendingActions[friend.identifyCode] ? "처리 중..." : "거절"}
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
 }
+
+export default RequestFriends;
