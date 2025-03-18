@@ -60,12 +60,6 @@ public class Service implements UserDetailsService{
 
  
  
- /** 
-  * 채팅 입력
-  * -> 저장
-  * 채팅 불러오기 
-  * -> 페이지 시작 시 (구독 시) -> serv에서 메시지 로딩 -> JSON묶음 return -> 프론트엔드에서 받아서 저장 -> 과정 완료 이전까지 채팅 입력 금지   
-  */
  
  
  
