@@ -238,5 +238,17 @@ public class RESTAPI {
         return serv.findPassword(id, email);
     }
 	
+	@GetMapping("isfriend")
+	public ResponseEntity<Map<String, Boolean>> isfriend(@RequestParam(name = "userId")Long userId, @RequestParam(name = "myId")Long myId) {
+		Boolean state = false;
+		Friend isfriend = serv.IsFriend(userId, myId);
+		if(isfriend != null) {
+			if(isfriend.getState() == 1) {
+				state = true;
+			}
+		};
+
+		return ResponseEntity.ok(Map.of("state", state));
+	}
 }
 
