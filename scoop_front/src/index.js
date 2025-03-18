@@ -10,6 +10,8 @@ import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import { ChatPage } from './component/ChatPage';
 import { Login } from './login';
 import SignUp from './SignUp';
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>

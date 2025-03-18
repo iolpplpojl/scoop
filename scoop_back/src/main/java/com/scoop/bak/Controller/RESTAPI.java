@@ -227,5 +227,16 @@ public class RESTAPI {
 		 
 		 return ResponseEntity.status(404).body(Map.of("message", "오류 발생"));
 	}
+	
+	@PostMapping("/find-id")
+    public String findId(@RequestParam String email) {
+        return serv.findId(email);
+    }
+
+    @PostMapping("/find-password")
+    public String findPassword(@RequestParam String id, @RequestParam String email) {
+        return serv.findPassword(id, email);
+    }
+	
 }
 
