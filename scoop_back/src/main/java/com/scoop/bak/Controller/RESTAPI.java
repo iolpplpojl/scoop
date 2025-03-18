@@ -34,6 +34,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 
+
+
+
 //
 @RequestMapping("/api")
 @RestController
@@ -46,7 +49,14 @@ public class RESTAPI {
 		serv = ser;
 		
 	}
+
 	
+	@PostMapping("/dm")
+	public ResponseEntity<?> dm(@RequestParam("id") String idenId, @RequestParam("to") String to)
+	{
+		String num = serv.DM_isExist(idenId, to);
+		return ResponseEntity.ok().body(num);
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestParam("id") String id, @RequestParam("pwd") String pwd, HttpServletResponse res) {
@@ -149,8 +159,9 @@ public class RESTAPI {
 	// 누르면 서버아이디/채널아이디 이런식으로 수행;
 	
 	@GetMapping("/test")
-	public List<ChatroomDTO> test(){
-		return serv.getChannelByServer("2");
+	public ResponseEntity<?> test(){
+		serv.DM_isExist("2","1");
+		return ResponseEntity.ok().body("ㅋㅋ");
 	}
 	
 	@PostMapping("/getchatrooms")

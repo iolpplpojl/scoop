@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getSubFromLoginToken } from "../util/GetSubByLogintoken"; // 로그인 토큰에서 sub값 추출 기능
+import { Context } from "../Connector";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function FriendsContainer() {
   const REST = process.env.REACT_APP_RESTURL;
@@ -7,7 +10,9 @@ export function FriendsContainer() {
   const [friendsData, setFriendsData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const {accessToken} = useContext(Context);
+  const nav = useNavigate();
+  const loc = useLocation();
   useEffect(() => {
     fetchFriendsData();
   }, []);
@@ -49,6 +54,24 @@ export function FriendsContainer() {
       });
   };
 
+  const handleChat = (friend) => {
+    console.log("chat");
+    axios(`https://${REST}/api/dm`, {
+      method : "post",
+      params : {
+          id: accessToken.sub,
+          to: friend.identifyCode
+      },
+      withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
+  }).then((res) => { 
+          console.log(res);
+          nav(`channel/@me/${res.data}`)
+          return;
+  }).catch((err) => { 
+          console.log(err);
+          return;
+  });
+  }
   return (
     <div className="friends-container">
       <h3>친구 목록</h3>
@@ -64,6 +87,7 @@ export function FriendsContainer() {
                 <strong>식별코드:</strong> {friend.identifyCode} | 
                 <strong>아이디:</strong> {friend.id} | 
                 <strong>닉네임:</strong> {friend.nickname}
+                <button onClick={()=> {handleChat(friend)}}>채팅</button>
               </li>
             ))}
           </ul>
@@ -74,5 +98,6 @@ export function FriendsContainer() {
     </div>
   );
 }
+
 
 export default FriendsContainer;

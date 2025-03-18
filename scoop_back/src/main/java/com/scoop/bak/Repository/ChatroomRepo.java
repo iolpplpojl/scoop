@@ -13,4 +13,7 @@ import com.scoop.bak.classes.user.Friend;
 public interface ChatroomRepo extends JpaRepository<Chatroom, Long> {
 	@Query("SELECT c FROM Chatroom c WHERE c.ServerId = :id")
 	List<Chatroom> findChannelsByServerId(@Param("id") Long id);
+	
+	@Query("SELECT Count(c) from Chatroom c")
+	int getCount();
 }

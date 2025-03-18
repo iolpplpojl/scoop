@@ -285,7 +285,7 @@
             return
          };
         return (
-            <Context.Provider value={{sendMessage,getServerByChannel,serverQueue,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected}}>
+            <Context.Provider value={{sendMessage,getServerByChannel,serverQueue,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected,accessToken}}>
                     {children}
             </Context.Provider>
         )

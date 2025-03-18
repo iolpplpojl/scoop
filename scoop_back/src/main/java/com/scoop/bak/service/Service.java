@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.scoop.bak.JwtUtil;
+import com.scoop.bak.Repository.ChatroomDMRepo;
 import com.scoop.bak.Repository.ChatroomRepo;
 import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.MemberRepo;
@@ -23,6 +24,7 @@ import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
 import com.scoop.bak.classes.chat.Chatroom;
 import com.scoop.bak.classes.chat.ChatroomDTO;
+import com.scoop.bak.classes.chat.Chatroom_DM;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
 import com.scoop.bak.classes.user.Friend;
@@ -41,6 +43,10 @@ public class Service implements UserDetailsService{
  private UserRepo repo_user;
  private MessageRepo repo_mes;
  private ChatroomRepo repo_cha;
+ 
+ @Autowired
+ private ChatroomDMRepo repo_cha_dm;
+ 
  @Autowired
  private FriendRepo repo_friend;
  
@@ -61,6 +67,30 @@ public class Service implements UserDetailsService{
   * -> 페이지 시작 시 (구독 시) -> serv에서 메시지 로딩 -> JSON묶음 return -> 프론트엔드에서 받아서 저장 -> 과정 완료 이전까지 채팅 입력 금지   
   */
  
+ 
+ 
+ 
+public String DM_isExist(String start, String to) {
+	Chatroom_DM dm = repo_cha_dm.findByUserName(Long.parseLong(start),Long.parseLong(to)).orElse(null);
+	System.out.println(repo_cha.count());
+	
+	if(dm != null) {	
+		System.out.println("이미 있삼.");
+		return dm.getChatroomID().toString();
+	}
+	Chatroom c = new Chatroom();
+	c.setType(1);
+	c.setPublic(true);
+	repo_cha.save(c);
+	System.out.println(repo_cha.count());
+	dm = new Chatroom_DM();
+	dm.setChatroomID(repo_cha.count());
+	dm.setUserA(Long.parseLong(start));
+	dm.setUserB(Long.parseLong(to));
+	repo_cha_dm.save(dm);
+	
+	return dm.getChatroomID().toString();
+}
  
  
  public List<MessageDTO> loadMessageByChatRoomId(String id){
