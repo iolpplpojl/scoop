@@ -127,3 +127,13 @@
 .ClickCont a:hover {
   background-color: #00000013; /* 마우스를 갖다 댔을 때 배경색 변화 */
 }
+.under-bar{ 
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  gap: 20px;
+
+}
+.link-btn:visited, .link-btn:active {
+  color: #05AFF2;
+}

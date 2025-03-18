@@ -3,12 +3,14 @@ package com.scoop.bak.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.scoop.bak.JwtUtil;
@@ -28,6 +30,8 @@ import com.scoop.bak.classes.user.FriendDTO;
 import com.scoop.bak.classes.user.SignupRequest;
 import com.scoop.bak.classes.user.User;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
 
@@ -42,6 +46,9 @@ public class Service implements UserDetailsService{
  
  @Autowired
  private PasswordEncoder passwordEncoder;  // BCryptPasswordEncoder 주입
+ 
+ @Autowired
+ private JavaMailSender mailSender;
 
  JwtUtil jwt;
 
@@ -245,4 +252,39 @@ public boolean updateStateFriend(Long userId, Long myId) {
 
 
 
+public String findId(String email) {
+    Optional<User> user = repo_user.findByEmail(email);
+    if (user.isPresent()) {
+        sendEmail(email, "아이디 찾기", "당신의 아이디는: " + user.get().getId());
+        return "이메일로 아이디를 전송했습니다.";
+    }
+    return "해당 이메일로 등록된 계정이 없습니다.";
+}
+
+public String findPassword(String id, String email) {
+    Optional<User> user = repo_user.findByIdAndEmail(id, email);
+    if (user.isPresent()) {
+        String resetToken = generateResetToken();
+        String resetLink = "http://192.168.0.31/reset-password?token=" + resetToken;
+        sendEmail(email, "비밀번호 재설정", "비밀번호를 재설정하려면 다음 링크를 클릭하세요: " + resetLink);
+        return "비밀번호 재설정 링크를 이메일로 전송했습니다.";
+    }
+    return "입력한 정보와 일치하는 계정이 없습니다.";
+}
+private void sendEmail(String to, String subject, String text) {
+    try {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(text);
+        mailSender.send(message);
+    } catch (MessagingException e) {
+        throw new RuntimeException("이메일 전송 실패");
+    }
+}
+
+private String generateResetToken() {
+    return UUID.randomUUID().toString();
+}
 }
