@@ -271,18 +271,32 @@ public String findPassword(String id, String email) {
     }
     return "입력한 정보와 일치하는 계정이 없습니다.";
 }
-private void sendEmail(String to, String subject, String text) {
+private void sendEmail(String to, String subject, String userId) {
     try {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        String htmlContent = "<div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>"
+                + "<div style='max-width: 500px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);'>"
+                + "<h2 style='color: #007BFF;'>🔑 아이디 찾기 결과</h2>"
+                + "<p>안녕하세요! 요청하신 아이디 찾기 결과입니다. </p>"
+                + "<p><strong> 아이디:</strong> <span style='color: #28a745; font-weight: bold;'>" + userId + "</span></p>"
+                + "<hr style='border: 0; height: 1px; background: #ddd;'>"
+                + "<p style='font-size: 12px; color: #666;'>※ 본 메일은 자동 발송 메일입니다. 문의 사항이 있다면 고객센터를 이용해주세요.</p>"
+                + "</div></div>";
+
+        helper.setFrom("tlgus0020@naver.com");
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(text);
+        helper.setText(htmlContent, true); // ✅ HTML 형식으로 이메일 전송
+
         mailSender.send(message);
+        System.out.println("✅ 이메일 전송 성공: " + to);
     } catch (MessagingException e) {
-        throw new RuntimeException("이메일 전송 실패");
+        throw new RuntimeException("❌ 이메일 전송 실패: " + e.getMessage());
     }
 }
+
 
 private String generateResetToken() {
     return UUID.randomUUID().toString();

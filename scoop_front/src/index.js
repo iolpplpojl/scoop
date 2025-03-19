@@ -10,6 +10,8 @@ import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import { ChatPage } from './component/ChatPage';
 import { Login } from './login';
 import SignUp from './SignUp';
+import { FindId } from './find-id';
+import { FindPw } from './find-pw';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,6 +21,8 @@ root.render(
   <Routes>
     <Route path="/login" element={<Login></Login>}></Route>
     <Route path="/register" element={<SignUp></SignUp>}></Route>
+    <Route path="/find-id" element={<FindId></FindId>}></Route>
+    <Route path="/find-password" element={<FindPw></FindPw>}></Route>
     <Route path="/" element={<Main />}>
     <Route path="/channel/"></Route>
     <Route path="/channel/:server"></Route>
