@@ -52,12 +52,11 @@ export function Login(props){
                 <div className="input-group">
                     <label htmlFor="id">이메일</label>
                     <input id="id" required  value = {id} onChange={(e) => setId(e.target.value)}></input>  
-                    <Link href="/find-id" className="link-btn">아이디 찾기</Link>
                     </div>
                 <div className="input-group">
                     <label htmlFor="password">비밀번호</label>
                     <input id="pwd" required value ={pwd} onChange={(e) => setPwd(e.target.value)}></input> 
-                    <Link href="/find-password" className="link-btn">비밀번호 찾기</Link>
+                    <Link to="/find-password" className="link-btn">비밀번호 찾기</Link>
                     </div>
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
                 <button type="submit" className="submit-btn">로그인</button>

@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 //import org.springframework.mail.javamail.JavaMailSender;
 //import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,8 +55,8 @@ public class Service implements UserDetailsService{
  @Autowired
  private PasswordEncoder passwordEncoder;  // BCryptPasswordEncoder 주입
  
- //@Autowired
- //private JavaMailSender mailSender;
+ @Autowired
+ private JavaMailSender mailSender;
 
  JwtUtil jwt;
 
@@ -273,7 +275,7 @@ public boolean updateStateFriend(Long userId, Long myId) {
     return result == 1; // 업데이트 성공 여부 반환
 }
 
-
+/*
 
 public String findId(String email) {
     Optional<User> user = repo_user.findByEmail(email);
@@ -283,7 +285,7 @@ public String findId(String email) {
     }
     return "해당 이메일로 등록된 계정이 없습니다.";
 }
-
+*/
 public String findPassword(String id, String email) {
     Optional<User> user = repo_user.findByEmail(email);
     if (user.isPresent()) {
@@ -298,6 +300,7 @@ private void sendEmail(String to, String subject, String text) {
     try {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom("tlgus0020@naver.com");
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(text);
