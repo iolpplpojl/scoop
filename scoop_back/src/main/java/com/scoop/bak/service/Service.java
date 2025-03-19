@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 //import org.springframework.mail.javamail.JavaMailSender;
@@ -45,7 +47,7 @@ public class Service implements UserDetailsService{
  private UserRepo repo_user;
  private MessageRepo repo_mes;
  private ChatroomRepo repo_cha;
- 
+ private final StringRedisTemplate redis; // ✅ Redis 추가
  @Autowired
  private ChatroomDMRepo repo_cha_dm;
  
@@ -57,6 +59,7 @@ public class Service implements UserDetailsService{
  
  @Autowired
  private JavaMailSender mailSender;
+ 
 
  JwtUtil jwt;
 
@@ -136,12 +139,13 @@ public String DM_isExist(String start, String to) {
  }
  
  @Autowired
- public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2, MessageRepo rep3, ChatroomRepo rep4) {
+ public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2, MessageRepo rep3, ChatroomRepo rep4,StringRedisTemplate redisTemplate) {
 	 repo_mes = rep3;
 	 repo_user = rep2;
 	 repo = rep;
 	 repo_cha = rep4;
 	 jwt = jw;
+	 redis = redisTemplate;
 	  System.out.println(repo);
  }
 
@@ -286,10 +290,12 @@ public String findId(String email) {
     return "해당 이메일로 등록된 계정이 없습니다.";
 }
 */
-public String findPassword(String id, String email) {
+public String findPassword(String email) {
     Optional<User> user = repo_user.findByEmail(email);
     if (user.isPresent()) {
-        String resetToken = generateResetToken();
+        String resetToken = UUID.randomUUID().toString();  // 랜덤토큰 생성함
+        redis.opsForValue().set(resetToken, email, 30, TimeUnit.MINUTES); // 30
+        
         String resetLink = "http://192.168.0.31/reset-password?token=" + resetToken;
         sendEmail(email, "비밀번호 재설정", "비밀번호를 재설정하려면 다음 링크를 클릭하세요: " + resetLink);
         return "비밀번호 재설정 링크를 이메일로 전송했습니다.";
@@ -310,7 +316,5 @@ private void sendEmail(String to, String subject, String text) {
     }
 }
 
-private String generateResetToken() {
-    return UUID.randomUUID().toString();
-}
+
 }

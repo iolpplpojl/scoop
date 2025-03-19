@@ -290,10 +290,11 @@ public class RESTAPI {
         return serv.findId(email);
     }
 	*/
-    @PostMapping("/find-password")
-    public String findPassword(@RequestParam String id, @RequestParam String email) {
-        return serv.findPassword(id, email);
-    }
+	@PostMapping("/find-password")
+	public ResponseEntity<String> findPassword(@RequestBody Map<String, String> request) {
+	    String email = request.get("email");
+	    return ResponseEntity.ok(serv.findPassword(email));
+	}
 	
 }
 
