@@ -296,6 +296,10 @@ public class RESTAPI {
 	    return ResponseEntity.ok(serv.findPassword(email));
 	}
 	
+	public ResponseEntity<String> resetPassword(@RequestBody Map<String,String> requset){
+		return ResponseEntity.ok("비밀번호 변경 완료");
+	}
+	
 	
 	
 }

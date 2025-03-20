@@ -307,7 +307,7 @@ public String findPassword(String email) {
             serverIp = "localhost"; // 실패하면 기본값
         }
 
-        redis.opsForValue().set(resetToken, email, 30, TimeUnit.MINUTES);
+        redis.opsForValue().set(resetToken, email, 2, TimeUnit.MINUTES);
 
         // 🟢 동적으로 만든 링크 사용
         String resetLink = "http://" + serverIp + ":9999/reset-password?token=" + resetToken;

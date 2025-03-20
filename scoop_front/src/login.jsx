@@ -55,7 +55,7 @@ export function Login(props){
                     </div>
                 <div className="input-group">
                     <label htmlFor="password">비밀번호</label>
-                    <input id="pwd" required value ={pwd} onChange={(e) => setPwd(e.target.value)}></input> 
+                    <input id="pwd" type="password" required value ={pwd} onChange={(e) => setPwd(e.target.value)}></input> 
                     <Link to="/find-password" className="link-btn">비밀번호 찾기</Link>
                     </div>
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
