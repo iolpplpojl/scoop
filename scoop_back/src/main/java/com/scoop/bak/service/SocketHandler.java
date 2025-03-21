@@ -29,7 +29,7 @@ public class SocketHandler implements WebSocketHandler {
 	OnlineHandler online;
 	
 	
-	 //
+	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		// TODO Auto-generated method stub
