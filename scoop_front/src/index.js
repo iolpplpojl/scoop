@@ -10,11 +10,14 @@ import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import { ChatPage } from './component/ChatPage';
 import { Login } from './login';
 import SignUp from './SignUp';
+import Home from './home';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <Connector>
-  <Routes>
+  <Routes> 
+    <Route path="/home" element={<Home />}></Route>
     <Route path="/login" element={<Login></Login>}></Route>
     <Route path="/register" element={<SignUp></SignUp>}></Route>
     <Route path="/" element={<Main />}>
