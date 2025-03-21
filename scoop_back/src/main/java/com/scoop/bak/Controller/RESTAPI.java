@@ -297,8 +297,16 @@ public class RESTAPI {
 	    return ResponseEntity.ok(serv.findPassword(email));
 	}
 	
-	public ResponseEntity<String> resetPassword(@RequestBody Map<String,String> requset){
-		return ResponseEntity.ok("비밀번호 변경 완료");
+	@PostMapping("/reset-password")
+	public ResponseEntity<String> resetPassword(@RequestBody Map<String,String> request){
+		String token=request.get("token");
+		String newPassword=request.get("newPassword");
+		  boolean result = serv.resetPassword(token, newPassword);
+		    if (result) {
+		        return ResponseEntity.ok("비밀번호 변경 완료");
+		    } else {
+		        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰이 유효하지 않거나 만료됨");
+		    }
 	}
 	
 	
