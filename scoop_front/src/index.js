@@ -22,7 +22,7 @@ root.render(
     <Route path="/login" element={<Login></Login>}></Route>
     <Route path="/register" element={<SignUp></SignUp>}></Route>
     <Route path="/find-password" element={<FindPw></FindPw>}></Route>
-    <Route path='/ResetPassword' element={<ResetPassword></ResetPassword>}></Route>
+    <Route path='/reset-password' element={<ResetPassword></ResetPassword>}></Route>
     <Route path="/" element={<Main />}>
     <Route path="/channel/"></Route>
     <Route path="/channel/:server"></Route>

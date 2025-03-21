@@ -30,7 +30,10 @@ export function ResetPassword() {
             const res = await axios.post(`https://${REST}/api/reset-password`, {
                 token,
                 newPassword: password,
-            });
+            }
+            ,{
+                    headers: { "Content-Type": "application/json" } // ✅ 헤더 추가
+                });
 
             alert("비밀번호가 변경되었습니다. 로그인 페이지로 이동합니다.");
             navigate("/login");
@@ -41,20 +44,22 @@ export function ResetPassword() {
     };
 
     return (
-        <div className="reset-password-container">
+        <div id='Signup'>
+        <div className="signup-container">
             <h2>비밀번호 재설정</h2>
             {message && <p className="error-message">{message}</p>}
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className="input-group">
                     <label>새 비밀번호</label>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
-                <div>
+                <div className="input-group">
                     <label>비밀번호 확인</label>
                     <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                 </div>
-                <button type="submit">비밀번호 변경</button>
+                <button type="submit" className="submit-btn">비밀번호 변경</button>
             </form>
+        </div>
         </div>
     );
 }

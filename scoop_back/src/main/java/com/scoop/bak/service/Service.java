@@ -307,10 +307,10 @@ public String findPassword(String email) {
             serverIp = "localhost"; // 실패하면 기본값
         }
 
-        redis.opsForValue().set(resetToken, email, 2, TimeUnit.MINUTES);
+        redis.opsForValue().set(resetToken, email, 5, TimeUnit.MINUTES);
 
         // 🟢 동적으로 만든 링크 사용
-        String resetLink = "http://" + serverIp + ":9999/reset-password?token=" + resetToken;
+        String resetLink = "https://" + serverIp + ":3000/reset-password?token=" + resetToken;
         sendEmail(email, "비밀번호 재설정", "비밀번호를 재설정하려면 다음 링크를 클릭하세요: " + resetLink);
 
         return "비밀번호 재설정 링크를 이메일로 전송했습니다.";
@@ -329,6 +329,26 @@ private void sendEmail(String to, String subject, String text) {
     } catch (MessagingException e) {
         throw new RuntimeException("이메일 전송 실패");
     }
+}
+
+
+public boolean resetPassword(String token, String newPassword) {
+	String email = redis.opsForValue().get(token);
+	if(email == null) {
+		return false;
+	}
+	 Optional<User> user = repo_user.findByEmail(email);
+	    if (user.isPresent()) {
+	    	user.get().setPwd(passwordEncoder.encode(newPassword));
+	    	repo_user.save(user.get());
+	    	
+	    	redis.delete(token);
+	    	return true;
+	    }
+	    
+	    
+	
+	return false;
 }
 
 
