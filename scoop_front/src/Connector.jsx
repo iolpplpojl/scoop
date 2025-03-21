@@ -13,6 +13,7 @@
         const [accessToken, setAccessToken] = useState({});    
         const [wsConnected, setWsConnected] = useState(false);
         const [subChannel, setSubChannel] = useState({});
+        const [onLineFriend, setOnLineFriend] = useState([]);
         const [userName,setUserName] = useState("");
         const socRef = useRef();
         
@@ -28,6 +29,11 @@
         },[loc])
 
         useEffect(()=>{
+            if(onLineFriend.length){
+                alert("친구 입장함")
+            }
+        },[onLineFriend])
+        useEffect(()=>{
             console.log(messageQueue);
         },[messageQueue])
         useEffect( () => {
@@ -35,9 +41,7 @@
         },[subChannel])
         useEffect(() => { 
             console.log(JSON.stringify(accessToken)+2);
-
             if(wsConnected !== true){
-
                 ConnectWs();
             }
         }, [accessToken])
@@ -56,7 +60,7 @@
                 setWsConnected(true);
                 socRef.current.send(JSON.stringify({
                     "type" : "ENTER_APP",
-                    "writer" : accessToken.name, // accessToken의 변수가 들어갈 자리
+                    "writer" : accessToken.sub, // accessToken의 변수가 들어갈 자리
                     "text" : "Connected",
                     
                 }));
@@ -108,7 +112,14 @@
             socRef.current.onclose = () => {
                 console.log("discon");
                 setWsConnected(false);
+                socRef.current.send(JSON.stringify({
+                    "type" : "EXIT_APP",
+                    "writer" : accessToken.sub, // accessToken의 변수가 들어갈 자리
+                    "text" : "Connected",
+                    
+                }));
                 socRef.current = null;
+                
             }
             }
         }
