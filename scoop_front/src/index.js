@@ -11,6 +11,7 @@ import { ChatPage } from './component/ChatPage';
 import { Login } from './login';
 import SignUp from './SignUp';
 import { FindPw } from './find-pw';
+import { ResetPassword } from './ResetPassword';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,6 +22,7 @@ root.render(
     <Route path="/login" element={<Login></Login>}></Route>
     <Route path="/register" element={<SignUp></SignUp>}></Route>
     <Route path="/find-password" element={<FindPw></FindPw>}></Route>
+    <Route path='/reset-password' element={<ResetPassword></ResetPassword>}></Route>
     <Route path="/" element={<Main />}>
     <Route path="/channel/" ></Route>
     <Route path="/channel/:server"></Route>

@@ -297,10 +297,25 @@ public class RESTAPI {
         return serv.findId(email);
     }
 	*/
-    @PostMapping("/find-password")
-    public String findPassword(@RequestParam String id, @RequestParam String email) {
-        return serv.findPassword(id, email);
-    }
+	@PostMapping("/find-password")
+	public ResponseEntity<String> findPassword(@RequestBody Map<String, String> request) {
+	    String email = request.get("email");
+	    return ResponseEntity.ok(serv.findPassword(email));
+	}
+	
+	@PostMapping("/reset-password")
+	public ResponseEntity<String> resetPassword(@RequestBody Map<String,String> request){
+		String token=request.get("token");
+		String newPassword=request.get("newPassword");
+		  boolean result = serv.resetPassword(token, newPassword);
+		    if (result) {
+		        return ResponseEntity.ok("비밀번호 변경 완료");
+		    } else {
+		        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰이 유효하지 않거나 만료됨");
+		    }
+	}
+	
+	
 	
 }
 
