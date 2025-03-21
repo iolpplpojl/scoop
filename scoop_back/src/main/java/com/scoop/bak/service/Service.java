@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 //import org.springframework.mail.javamail.JavaMailSender;
@@ -38,6 +40,9 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 
 @org.springframework.stereotype.Service
 public class Service implements UserDetailsService{
@@ -45,7 +50,7 @@ public class Service implements UserDetailsService{
  private UserRepo repo_user;
  private MessageRepo repo_mes;
  private ChatroomRepo repo_cha;
- 
+ private final StringRedisTemplate redis; // ✅ Redis 추가
  @Autowired
  private ChatroomDMRepo repo_cha_dm;
  
@@ -57,6 +62,7 @@ public class Service implements UserDetailsService{
  
  @Autowired
  private JavaMailSender mailSender;
+ 
 
  JwtUtil jwt;
 
@@ -136,12 +142,13 @@ public String DM_isExist(String start, String to) {
  }
  
  @Autowired
- public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2, MessageRepo rep3, ChatroomRepo rep4) {
+ public Service(MemberRepo rep, JwtUtil jw,UserRepo rep2, MessageRepo rep3, ChatroomRepo rep4,StringRedisTemplate redisTemplate) {
 	 repo_mes = rep3;
 	 repo_user = rep2;
 	 repo = rep;
 	 repo_cha = rep4;
 	 jwt = jw;
+	 redis = redisTemplate;
 	  System.out.println(repo);
  }
 
@@ -286,12 +293,26 @@ public String findId(String email) {
     return "해당 이메일로 등록된 계정이 없습니다.";
 }
 */
-public String findPassword(String id, String email) {
+
+public String findPassword(String email) {
     Optional<User> user = repo_user.findByEmail(email);
     if (user.isPresent()) {
-        String resetToken = generateResetToken();
-        String resetLink = "http://192.168.0.31/reset-password?token=" + resetToken;
+        String resetToken = UUID.randomUUID().toString();  // 랜덤토큰 생성
+
+        // 🟢 현재 서버의 IP 자동 감지
+        String serverIp;
+        try {
+            serverIp = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            serverIp = "localhost"; // 실패하면 기본값
+        }
+
+        redis.opsForValue().set(resetToken, email, 2, TimeUnit.MINUTES);
+
+        // 🟢 동적으로 만든 링크 사용
+        String resetLink = "http://" + serverIp + ":9999/reset-password?token=" + resetToken;
         sendEmail(email, "비밀번호 재설정", "비밀번호를 재설정하려면 다음 링크를 클릭하세요: " + resetLink);
+
         return "비밀번호 재설정 링크를 이메일로 전송했습니다.";
     }
     return "입력한 정보와 일치하는 계정이 없습니다.";
@@ -310,7 +331,5 @@ private void sendEmail(String to, String subject, String text) {
     }
 }
 
-private String generateResetToken() {
-    return UUID.randomUUID().toString();
-}
+
 }

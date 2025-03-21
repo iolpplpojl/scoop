@@ -7,31 +7,30 @@ export function FindPw() {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
-    const REST = process.env.REACT_APP_RESTURL; // API 주소 (환경 변수)
+    const REST = process.env.REACT_APP_RESTURL;
     
-    // 폼 제출 시 실행
+
     const handleSubmit = (e) => {
-        e.preventDefault(); // 기본 동작 방지
-        doFindPw(); // POST 요청 실행
+        e.preventDefault(); 
+        doFindPw(); 
     };
-    function doFindPw(){
+    function doFindPw() {
         console.log(email);
-        axios(`https://${REST}/api/find-password`,{
-            method:"POST",
-            data: JSON.stringify({
-                id:id,
-                email: email
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
+        axios.post(`https://${REST}/api/find-password`, 
+            { email: email }, // 객체 그대로 전달
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
         .then((res) => {
             console.log(res);
             alert("이메일로 비밀번호 재설정 주소를 보냈습니다");
             navigate("/login");
-        }).catch((err) => {
-            console.log(err.response);
+        })
+        .catch((err) => {
+            console.error("❌ 비밀번호 찾기 오류:", err.response);
             alert("error");
         });
     }
