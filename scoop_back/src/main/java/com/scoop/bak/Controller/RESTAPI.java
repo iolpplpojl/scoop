@@ -261,6 +261,7 @@ public class RESTAPI {
 	
 	@GetMapping("isfriend")
 	public ResponseEntity<Map<String, Boolean>> isfriend(@RequestParam(name = "userId")Long userId, @RequestParam(name = "myId")Long myId) {
+		System.out.println("우클릭 이벤트 실행됌!");
 		Boolean state = false;
 		Friend isfriend = serv.IsFriend(userId, myId);
 		if(isfriend != null) {

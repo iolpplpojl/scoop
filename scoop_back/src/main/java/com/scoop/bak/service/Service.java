@@ -231,7 +231,7 @@ public List<FriendDTO> findRequestFriendsBySub(Long sub) {
 	List<FriendDTO> users = new ArrayList<>();
 	for (Long requestfriend : requestfriends) {
 		User user;
-		user = repo_user.findById(requestfriend).orElse(null);
+		user = repo_user.findByIdentifyCode(requestfriend).orElse(null);
 		users.add(new FriendDTO(user.getIdentifyCode(), user.getEmail(), user.getNickname()));
 	}
 	return users;

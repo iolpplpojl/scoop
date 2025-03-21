@@ -13,6 +13,6 @@ import lombok.ToString;
 @ToString
 public class FriendDTO {
 	private Long identifyCode;
-    private String id;
+    private String email;
     private String nickname;
 }
