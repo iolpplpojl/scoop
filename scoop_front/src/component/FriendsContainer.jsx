@@ -60,7 +60,7 @@ export function FriendsContainer() {
       method : "post",
       params : {
           id: accessToken.sub,
-          to: friend.identifyCode
+          to: friend
       },
       withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
   }).then((res) => { 
@@ -87,7 +87,7 @@ export function FriendsContainer() {
                 <strong>식별코드:</strong> {friend.identifyCode} | 
                 <strong>아이디:</strong> {friend.id} | 
                 <strong>닉네임:</strong> {friend.nickname}
-                <button onClick={()=> {handleChat(friend)}}>채팅</button>
+                <button onClick={()=> {handleChat(friend.identifyCode)}}>채팅</button>
               </li>
             ))}
           </ul>

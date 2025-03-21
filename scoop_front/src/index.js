@@ -22,7 +22,7 @@ root.render(
     <Route path="/register" element={<SignUp></SignUp>}></Route>
     <Route path="/find-password" element={<FindPw></FindPw>}></Route>
     <Route path="/" element={<Main />}>
-    <Route path="/channel/"></Route>
+    <Route path="/channel/" ></Route>
     <Route path="/channel/:server"></Route>
     <Route path="/channel/:server/:id" element={
         <ChatPage></ChatPage>

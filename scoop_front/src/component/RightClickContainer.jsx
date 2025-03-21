@@ -81,7 +81,7 @@ const RightClickContainer = ({
                     <button onClick={() => alert("정보보기")}>정보보기</button>
                     {isFriend ? (
                         <>
-                            <button onClick={() => alert("1:1 채팅하기")}>1:1 채팅</button>
+                            <button onClick={() => alert(`${loggedInUserId} + ${userId}`)}>1:1 채팅</button>
                             <button
                                 onClick={async () => {
                                     await deleteFriend(selectedUserId, loggedInUserId);

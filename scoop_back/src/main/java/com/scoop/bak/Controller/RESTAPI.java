@@ -118,6 +118,8 @@ public class RESTAPI {
 			}
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰");
 	}
+	
+	
 	@GetMapping("/VerifyAccess")
 	public ResponseEntity<?> Verify(@RequestParam("key") String token)
 	{
@@ -194,9 +196,11 @@ public class RESTAPI {
 	}
 	
 	@PostMapping("/addfriend")
-	public ResponseEntity<Map<String, String>> addfriend(@RequestBody Map<String, Long> request) {
-		 Long sub = request.get("sub");
-		 Long friendCode = request.get("friendCode");
+	public ResponseEntity<Map<String, String>> addfriend(@RequestBody Map<String, String> request) {
+		 Long sub = Long.parseLong(request.get("sub"));
+		 String friendEmail = request.get("friendCode");
+		 
+		 Long friendCode = serv.getFriendCode(friendEmail);
 		 
 		 if (sub == friendCode) {
 			 return ResponseEntity.badRequest().body(Map.of("message", "자기 자신의 코드입니다."));
@@ -262,6 +266,8 @@ public class RESTAPI {
 	@GetMapping("isfriend")
 	public ResponseEntity<Map<String, Boolean>> isfriend(@RequestParam(name = "userId")Long userId, @RequestParam(name = "myId")Long myId) {
 		System.out.println("우클릭 이벤트 실행됌!");
+		System.out.println("!!!!!!!!!!!!!" + userId);
+		System.out.println("!!!!!!!!!!!!!" + myId);
 		Boolean state = false;
 		Friend isfriend = serv.IsFriend(userId, myId);
 		if(isfriend != null) {

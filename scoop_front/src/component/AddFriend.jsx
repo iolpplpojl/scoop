@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 
 function getSubFromLoginToken() {
   const token = localStorage.getItem("logintoken");
@@ -7,9 +6,9 @@ function getSubFromLoginToken() {
     console.warn("로그인 토큰이 존재하지 않습니다.");
     return "";
   }
-  
+
   try {
-    const parts = token.split('.');
+    const parts = token.split(".");
     if (parts.length !== 3) {
       throw new Error("유효하지 않은 토큰 형식입니다.");
     }
@@ -28,13 +27,8 @@ const AddFriend = ({ onClose, initialFriendCode }) => {
   const REST = process.env.REACT_APP_RESTURL;
 
   const handleChange = (e) => {
-    const value = e.target.value;
-    if (/^\d*$/.test(value)) {
-      setFriendCode(value);
-      setError("");
-    } else {
-      setError("숫자만 입력 가능합니다.");
-    }
+    setFriendCode(e.target.value);
+    setError("");
   };
 
   const handleSubmit = (friendCodeToSend) => {
@@ -71,12 +65,12 @@ const AddFriend = ({ onClose, initialFriendCode }) => {
 
   return (
     <div>
-      <h2>친구의 개인 식별코드를 입력하세요.</h2>
+      <h2>친구의 이메일을 입력하세요.</h2>
       <input
         type="text"
         value={friendCode}
         onChange={handleChange}
-        placeholder="숫자만 입력 가능"
+        placeholder="친구 코드 또는 이메일"
       />
       {error && <p>{error}</p>}
       <div>

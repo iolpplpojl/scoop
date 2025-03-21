@@ -313,4 +313,9 @@ private void sendEmail(String to, String subject, String text) {
 private String generateResetToken() {
     return UUID.randomUUID().toString();
 }
+
+
+public Long getFriendCode(String friendEmail) {
+	return repo_user.findByEmail(friendEmail).orElse(null).getIdentifyCode();
+}
 }
