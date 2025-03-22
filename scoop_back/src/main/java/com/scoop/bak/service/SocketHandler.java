@@ -25,6 +25,9 @@ public class SocketHandler implements WebSocketHandler {
 	@Autowired
 	MessageSender sender;
 	
+	@Autowired
+	OnlineHandler online;
+	
 	
 	
 	@Override
@@ -43,7 +46,10 @@ public class SocketHandler implements WebSocketHandler {
 		{
 			case "ENTER_APP":	
 				System.out.println(String.format("%s 유저가 입장헀습니다." , jn.get("writer")));
+				online.SetOnline(jn.get("writer").asText(), session);
 				break;
+			case "EXIT_APP":
+				online.SetOffline(jn.get("writer").asText(), session);
 			case "ENTER_CHANNEL":
 				sender.Register(jn.get("channel_id").asText(), session);
 				break;
@@ -65,7 +71,8 @@ public class SocketHandler implements WebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("some one is not here.");
-
+		online.SetOffline(null, session);
+		
 	}
 
 	@Override
