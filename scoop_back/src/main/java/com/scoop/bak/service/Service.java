@@ -63,6 +63,7 @@ public class Service implements UserDetailsService{
  @Autowired
  private JavaMailSender mailSender;
  
+ 
 
  JwtUtil jwt;
 
@@ -355,4 +356,5 @@ public boolean resetPassword(String token, String newPassword) {
 public Long getFriendCode(String friendEmail) {
 	return repo_user.findByEmail(friendEmail).orElse(null).getIdentifyCode();
 }
+
 }

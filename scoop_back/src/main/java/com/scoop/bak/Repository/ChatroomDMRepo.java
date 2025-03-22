@@ -15,4 +15,5 @@ public interface ChatroomDMRepo extends JpaRepository<Chatroom_DM, Long>{
 	
 	@Query("SELECT c FROM Chatroom_DM c WHERE (c.userA = :id and c.userB = :id2) or (c.userA = :id2 and c.userB = :id) ")
 	Optional<Chatroom_DM> findByUserName(@Param("id") Long usera, @Param("id2") Long userb);
+
 }

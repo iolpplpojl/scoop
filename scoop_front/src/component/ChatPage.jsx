@@ -51,7 +51,7 @@ export function ChatPage(props){
         <div class="OutputChat">
             <ul id="chatset">
                 {chats.map((ele, idx) => (
-                    <Chat key={idx} name={ele['userName']} text={ele['text']} date={ele['date']} userId={ele['userId']} ></Chat>
+                    <Chat key={idx} name={ele['userName']} text={ele['text']} date={ele['date']} userId={ele['userId']}></Chat>
                 ))}
             </ul>
          </div>

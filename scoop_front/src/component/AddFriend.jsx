@@ -70,7 +70,7 @@ const AddFriend = ({ onClose, initialFriendCode }) => {
         type="text"
         value={friendCode}
         onChange={handleChange}
-        placeholder="친구 코드 또는 이메일"
+        placeholder="친구 이메일"
       />
       {error && <p>{error}</p>}
       <div>
@@ -81,7 +81,6 @@ const AddFriend = ({ onClose, initialFriendCode }) => {
   );
 };
 
-// ✅ 외부에서 `userId`를 직접 전달받아 친구 추가할 수 있도록 `addFriend` 함수 추가
 export const addFriend = (userId) => {
   const sub = getSubFromLoginToken();
   if (!sub) {

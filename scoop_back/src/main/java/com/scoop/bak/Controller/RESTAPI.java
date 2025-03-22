@@ -198,9 +198,18 @@ public class RESTAPI {
 	@PostMapping("/addfriend")
 	public ResponseEntity<Map<String, String>> addfriend(@RequestBody Map<String, String> request) {
 		 Long sub = Long.parseLong(request.get("sub"));
-		 String friendEmail = request.get("friendCode");
+		 String friendCodeStr = request.get("friendCode");
+		 Long friendCode;
+
+		 if (friendCodeStr.matches("\\d+")) {
+		     // 숫자만으로 이루어진 경우 → Long으로 직접 해석
+		     friendCode = Long.parseLong(friendCodeStr);
+		 } else {
+		     // 이메일인 경우 → 서비스에서 코드 조회
+		     friendCode = serv.getFriendCode(friendCodeStr);
+		 }
 		 
-		 Long friendCode = serv.getFriendCode(friendEmail);
+		 System.out.println(friendCode);
 		 
 		 if (sub == friendCode) {
 			 return ResponseEntity.badRequest().body(Map.of("message", "자기 자신의 코드입니다."));
@@ -314,6 +323,8 @@ public class RESTAPI {
 		        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰이 유효하지 않거나 만료됨");
 		    }
 	}
+	
+	
 	
 	
 	
