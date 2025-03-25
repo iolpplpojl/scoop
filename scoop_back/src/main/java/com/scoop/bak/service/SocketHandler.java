@@ -35,6 +35,7 @@ public class SocketHandler implements WebSocketHandler {
 		// TODO Auto-generated method stub
 		System.out.println("some one is here.");
 		session.sendMessage(new TextMessage("hi."));
+		
 	}
 
 	@Override
