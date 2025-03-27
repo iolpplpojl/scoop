@@ -29,6 +29,7 @@ import com.scoop.bak.classes.MemberResDetails;
 import com.scoop.bak.classes.chat.Chatroom;
 import com.scoop.bak.classes.chat.ChatroomDTO;
 import com.scoop.bak.classes.chat.Chatroom_DM;
+import com.scoop.bak.classes.chat.Chatroom_DM_DTO;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
 import com.scoop.bak.classes.user.Friend;
@@ -358,8 +359,25 @@ public Long getFriendCode(String friendEmail) {
 }
 
 
-public List<Long> findDmListBySub(Long sub) {
-	return repo_cha_dm.findListBySub(sub);
+public List<Chatroom_DM_DTO> findDmListBySub(Long sub) {
+	List<Long> sublist = repo_cha_dm.findSubListBySub(sub);
+	List<Integer> dmlist = repo_cha_dm.findChatroomidListBySub(sub);
+	List<Chatroom_DM_DTO> result = new ArrayList<>();
+	
+	if (sublist.size() != dmlist.size()) {
+	    throw new IllegalStateException("DM 리스트와 상대방 ID 수가 일치하지 않습니다.");
+	}
+	
+	for (int i = 0; i < sublist.size(); i++) {
+		Chatroom_DM_DTO dto = new Chatroom_DM_DTO();
+		User user = repo_user.findByIdentifyCode(sublist.get(i)).orElse(null);
+		dto.setImage(user.getIcon());
+		dto.setNickname(user.getNickname());
+		dto.setChatroomid(dmlist.get(i));
+		result.add(dto);
+	}
+	
+	return result;
 }
 
 }

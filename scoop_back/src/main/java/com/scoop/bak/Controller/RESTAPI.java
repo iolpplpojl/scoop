@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.scoop.bak.JwtUtil;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.chat.ChatroomDTO;
+import com.scoop.bak.classes.chat.Chatroom_DM_DTO;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
 import com.scoop.bak.classes.user.Friend;
@@ -68,7 +69,7 @@ public class RESTAPI {
 	@GetMapping("/dmlist")
 	public  ResponseEntity<?> dmlist(@RequestParam("sub") Long sub){
 		
-		List<Long> dmlist = serv.findDmListBySub(sub); 
+		List<Chatroom_DM_DTO> dmlist = serv.findDmListBySub(sub); 
 		return ResponseEntity.ok().body(dmlist);
 	}
 

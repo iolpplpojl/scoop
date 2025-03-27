@@ -24,8 +24,10 @@ public interface ChatroomDMRepo extends JpaRepository<Chatroom_DM, Long>{
 		        END 
 		    FROM Chatroom_DM c 
 		    WHERE c.userA = :sub OR c.userB = :sub
+		    ORDER BY c.id
 		""")
-	List<Long> findListBySub(@Param("sub") Long sub);
+	List<Long> findSubListBySub(@Param("sub") Long sub);
 
-
+	@Query("SELECT c.ChatroomID FROM Chatroom_DM c WHERE c.userA = :sub OR c.userB = :sub ORDER BY c.id")
+    List<Integer> findChatroomidListBySub(@Param("sub") Long sub);
 }
