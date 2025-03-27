@@ -115,9 +115,10 @@ const RightClickContainer = ({
           }}
         >
           <button onClick={() => alert("정보보기")}>정보보기</button>
+          <button onClick={handleDirectMessage}>1:1 채팅</button>
           {isFriend ? (
             <>
-              <button onClick={handleDirectMessage}>1:1 채팅</button>
+
               <button
                 onClick={async () => {
                   await deleteFriend(selectedUserId, loggedInUserId);

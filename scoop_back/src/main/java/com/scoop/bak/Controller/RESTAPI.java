@@ -64,6 +64,13 @@ public class RESTAPI {
 		String num = serv.DM_isExist(idenId, to);
 		return ResponseEntity.ok().body(num);
 	}
+	
+	@GetMapping("/dmlist")
+	public  ResponseEntity<?> dmlist(@RequestParam("sub") Long sub){
+		
+		List<Long> dmlist = serv.findDmListBySub(sub); 
+		return ResponseEntity.ok().body(dmlist);
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestParam("id") String id, @RequestParam("pwd") String pwd, HttpServletResponse res) {

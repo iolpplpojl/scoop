@@ -357,4 +357,9 @@ public Long getFriendCode(String friendEmail) {
 	return repo_user.findByEmail(friendEmail).orElse(null).getIdentifyCode();
 }
 
+
+public List<Long> findDmListBySub(Long sub) {
+	return repo_cha_dm.findListBySub(sub);
+}
+
 }
