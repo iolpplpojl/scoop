@@ -103,7 +103,7 @@ public String DM_isExist(String start, String to) {
 	 
 	 List<MessageDTO> dto =new ArrayList<>();
 	 for(Message m : msg) {
-		 dto.add(new MessageDTO(m.getId(),m.getUserID(),m.getChatroomID(),m.getText(),m.getDate(), repo_user.findByIdentifyCode(m.getUserID()).orElse(null).getNickname()));
+		 dto.add(new MessageDTO("MESSAGE",m.getId(),m.getUserID(),m.getChatroomID(),m.getText(),m.getDate(), repo_user.findByIdentifyCode(m.getUserID()).orElse(null).getNickname()));
 	 }
 	 return dto;
  }

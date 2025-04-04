@@ -56,7 +56,7 @@ public class MessageSender {
 
 	public void Send(String Writer,String channel, String Message, String UserId) throws IOException {
 		LocalDateTime time = LocalDateTime.now();
-        String jsonMessage = objectMapper.writeValueAsString(new MessageDTO(null,Long.parseLong(UserId),Long.parseLong(channel),Message,time,Writer));
+        String jsonMessage = objectMapper.writeValueAsString(new MessageDTO("MESSAGE",null,Long.parseLong(UserId),Long.parseLong(channel),Message,time,Writer));
         System.out.println(jsonMessage);
 		ArrayList<WebSocketSession> soc;
 		soc = chan.get(channel).getSubmembers();

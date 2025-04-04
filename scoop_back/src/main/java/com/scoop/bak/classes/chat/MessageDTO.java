@@ -16,6 +16,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MessageDTO {
+	private String type;
+	
 	private Long id;
 	private Long UserId;
 	private Long chatroomID;

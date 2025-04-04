@@ -10,13 +10,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.UserRepo;
+import com.scoop.bak.classes.chat.MessageDTO;
+import com.scoop.bak.classes.chat.OnlineEventDTO;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.User;
 
 @Component
 public class OnlineHandler {
+	private ObjectMapper mapper = new ObjectMapper();
 
 	ConcurrentHashMap<String, Long> lo;
 	
@@ -41,7 +45,12 @@ public class OnlineHandler {
 		map.put(l, dto);
 		List<Friend> f = friend.findFriendsBySub(l);
 		System.out.println(s.getId());
-		
+		OnlineEventDTO aa =new OnlineEventDTO();
+		aa.setId(l);
+		aa.setIn(true);
+		aa.setType("FRIENDINOUT");
+        String jsonMessage = mapper.writeValueAsString(aa);
+
 		OnlineDTO eventer = map.get(lo.get(s.getId()));
 
 		for (Friend fr : f) {
@@ -50,10 +59,10 @@ public class OnlineHandler {
 					OnlineDTO user1 = map.get(fr.getUserA());
 					OnlineDTO user2 = map.get(fr.getUserB());
 					if(user1.getSub() == eventer.getSub()) {
-						user2.getS().sendMessage(new TextMessage("친구 옴 " + eventer.getSub()));
+						user2.getS().sendMessage(new TextMessage(jsonMessage));
 					}
 					else {
-						user1.getS().sendMessage(new TextMessage("친구 옴 " + eventer.getSub()));
+						user1.getS().sendMessage(new TextMessage(jsonMessage));
 					}
 
 				}
@@ -80,15 +89,20 @@ public class OnlineHandler {
 		List<Friend> f = friend.findFriendsBySub(lo.get(s.getId()));
 
 		OnlineDTO eventer = map.get(lo.get(s.getId()));
+		OnlineEventDTO aa =new OnlineEventDTO();
+		aa.setId(eventer.getSub());
+		aa.setIn(false);
+		aa.setType("FRIENDINOUT");
+        String jsonMessage = mapper.writeValueAsString(aa);
 		for (Friend fr : f) {
 			if(map.get(fr.getUserA()) != null && map.get(fr.getUserB()) != null){
 				OnlineDTO user1 = map.get(fr.getUserA());
 				OnlineDTO user2 = map.get(fr.getUserB());
 				if(user1.getSub() == eventer.getSub()) {
-					user2.getS().sendMessage(new TextMessage("친구 나감 " + eventer.getSub()));
+					user2.getS().sendMessage(new TextMessage(jsonMessage));
 				}
 				else {
-					user1.getS().sendMessage(new TextMessage("친구 나감 " + eventer.getSub()));
+					user1.getS().sendMessage(new TextMessage(jsonMessage));
 				}
 
 			}

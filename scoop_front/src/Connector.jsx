@@ -94,10 +94,15 @@
             socRef.current.onmessage = (msg) => {
                 const message = msg
                 try{
-                    console.log(JSON.parse(msg.data));
-                    onMessage(message.data);
-                    
-
+                    console.log(JSON.parse(msg.data).type);
+                    switch(JSON.parse(msg.data).type){
+                        case "MESSAGE":
+                            onMessage(message.data);
+                            break;  
+                        case "FRIENDINOUT":
+                            console.log('친구 이벤트');
+                            break;
+                    }
                 }
                 catch{
                     console.log(msg);
