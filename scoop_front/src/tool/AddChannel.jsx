@@ -37,7 +37,7 @@ export function AddChannel(props){
             <div>
                 서버명 : <input value={id} onChange={(e) => setId(e.target.value)}></input>
             </div>
-                <button onClick={() => handle()}>만들기</button>
+                <button onClick={() => handle()} disabled={id===""? true : false}>만들기</button>
         </div>
 
     )
