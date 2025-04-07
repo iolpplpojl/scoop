@@ -46,7 +46,7 @@ export function ServerContainer() {
             </ul>
         </div>
       </div>
-            { (server && server != "@me")? <Sidebar server={serverQueue[server]} seed={seed} wsConnected={wsConnected}></Sidebar> 
+            { (server && server != "@me")? <Sidebar server={serverQueue[server]} seed={seed} wsConnected={wsConnected} id={server} getServer={getServerByChannel}></Sidebar> 
             :  <Me></Me>}
       </div>  
 

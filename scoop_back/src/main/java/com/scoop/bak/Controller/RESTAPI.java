@@ -335,6 +335,11 @@ public class RESTAPI {
 	
 	
 	
-	
+	@PostMapping("/addChatrooms")
+	public ResponseEntity<?> addChatroom(@RequestParam("server_id") String serverid, @RequestParam("name") String name)
+	{
+		String num = serv.addChatrooms(serverid,name);
+		return ResponseEntity.ok().body(num);
+	}	
 }
 

@@ -380,4 +380,16 @@ public List<Chatroom_DM_DTO> findDmListBySub(Long sub) {
 	return result;
 }
 
+
+public String addChatrooms(String server, String name) {
+	Chatroom chat = new Chatroom();
+	chat.setId(null);
+	chat.setPublic(true);
+	chat.setRoomName(name);
+	chat.setServerId(Long.parseLong(server));
+	chat.setType(0);
+	repo_cha.save(chat);
+	return 	Long.toString(repo_cha.count());
+
+}
 }
