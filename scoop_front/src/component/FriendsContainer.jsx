@@ -10,12 +10,17 @@ export function FriendsContainer() {
   const [friendsData, setFriendsData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const {accessToken} = useContext(Context);
+  const {accessToken, onLineFriend} = useContext(Context);
   const nav = useNavigate();
   const loc = useLocation();
   useEffect(() => {
     fetchFriendsData();
   }, []);
+
+  useEffect(() =>{
+    console.log(friendsData);
+
+  }, [friendsData]);
 
   const fetchFriendsData = () => {
     const sub = getSubFromLoginToken();
@@ -85,8 +90,9 @@ export function FriendsContainer() {
             {friendsData.map((friend, index) => (
               <li key={index}>
                 <strong>식별코드:</strong> {friend.identifyCode} | 
-                <strong>아이디:</strong> {friend.id} | 
+                <strong>아이디:</strong> {friend.identifyCode} | 
                 <strong>닉네임:</strong> {friend.nickname}
+                {onLineFriend.includes(friend.identifyCode)? "접속중!" : null}
                 <button onClick={()=> {handleChat(friend.identifyCode)}}>채팅</button>
               </li>
             ))}

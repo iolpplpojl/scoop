@@ -29,9 +29,9 @@
         },[loc])
 
         useEffect(()=>{
-            if(onLineFriend.length){
-                alert("친구 입장함")
-            }
+
+                console.log(onLineFriend);
+            
         },[onLineFriend])
         useEffect(()=>{
             console.log(messageQueue);
@@ -91,6 +91,25 @@
                     }
                 );
             }
+
+            function onFriend(msg){
+                setOnLineFriend((prev) => 
+                    {
+                        const data = JSON.parse(msg);
+                        console.log(data);
+                        let id = data.id;
+                        if(data.in === true)
+                        {
+                            return [...prev,data.id]
+                        }
+                        else{
+                            return prev.filter(item => item !== data.id);
+                        }
+                        //return {[message.data["channel"]] : message.data};
+                       
+                    }
+                );
+            }
             socRef.current.onmessage = (msg) => {
                 const message = msg
                 try{
@@ -100,6 +119,7 @@
                             onMessage(message.data);
                             break;  
                         case "FRIENDINOUT":
+                            onFriend(message.data);
                             console.log('친구 이벤트');
                             break;
                     }
@@ -301,7 +321,7 @@
             return
          };
         return (
-            <Context.Provider value={{sendMessage,getServerByChannel,serverQueue,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected,accessToken}}>
+            <Context.Provider value={{sendMessage,getServerByChannel,serverQueue,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected,accessToken,onLineFriend}}>
                     {children}
             </Context.Provider>
         )

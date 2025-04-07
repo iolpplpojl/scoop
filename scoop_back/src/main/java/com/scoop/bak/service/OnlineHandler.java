@@ -52,17 +52,31 @@ public class OnlineHandler {
         String jsonMessage = mapper.writeValueAsString(aa);
 
 		OnlineDTO eventer = map.get(lo.get(s.getId()));
-
+        
+		OnlineEventDTO aain =new OnlineEventDTO();
+		aain.setIn(true);
+		aain.setType("FRIENDINOUT");
+        
+        
 		for (Friend fr : f) {
 			if(map.get(fr.getUserA()) != null && map.get(fr.getUserB()) != null){
 				if(map.get(fr.getUserA()) != null && map.get(fr.getUserB()) != null){
 					OnlineDTO user1 = map.get(fr.getUserA());
 					OnlineDTO user2 = map.get(fr.getUserB());
+					
+					if(user1.getS().isOpen() && user2.getS().isOpen()) {
 					if(user1.getSub() == eventer.getSub()) {
+						aain.setId(user2.getSub());
+				        String jsonMessagein = mapper.writeValueAsString(aain);
 						user2.getS().sendMessage(new TextMessage(jsonMessage));
+						eventer.getS().sendMessage(new TextMessage(jsonMessagein));
 					}
 					else {
+						aain.setId(user1.getSub());
+				        String jsonMessagein = mapper.writeValueAsString(aain);
 						user1.getS().sendMessage(new TextMessage(jsonMessage));
+						eventer.getS().sendMessage(new TextMessage(jsonMessagein));
+					}
 					}
 
 				}
@@ -94,15 +108,19 @@ public class OnlineHandler {
 		aa.setIn(false);
 		aa.setType("FRIENDINOUT");
         String jsonMessage = mapper.writeValueAsString(aa);
+
 		for (Friend fr : f) {
 			if(map.get(fr.getUserA()) != null && map.get(fr.getUserB()) != null){
 				OnlineDTO user1 = map.get(fr.getUserA());
 				OnlineDTO user2 = map.get(fr.getUserB());
-				if(user1.getSub() == eventer.getSub()) {
-					user2.getS().sendMessage(new TextMessage(jsonMessage));
-				}
-				else {
-					user1.getS().sendMessage(new TextMessage(jsonMessage));
+				if(user1.getS().isOpen() && user2.getS().isOpen()) {
+					if(user1.getSub() == eventer.getSub()) {
+						user2.getS().sendMessage(new TextMessage(jsonMessage));
+						
+					}
+					else {
+						user1.getS().sendMessage(new TextMessage(jsonMessage));
+					}
 				}
 
 			}
