@@ -97,6 +97,7 @@ const RightClickContainer = ({
   };
 
   return (
+    <li>
     <div style={{ display: "inline-block", width: "100%" }}>
       {children}
 
@@ -141,6 +142,7 @@ const RightClickContainer = ({
         </div>
       )}
     </div>
+    </li>
   );
 };
 
