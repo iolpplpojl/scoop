@@ -13,7 +13,7 @@ export function Chat({ name, text, date, userId }) {
 
     useEffect(() => {
         // 정규식으로 <@userId> 패턴 찾기
-        const regex = /<@([^>]+)>/g;
+        const regex = /<([@#!$%^&])([^>]+)>/g;
         const elements = [];
         let lastIndex = 0;
         let match;
@@ -24,14 +24,15 @@ export function Chat({ name, text, date, userId }) {
                 elements.push(beforeText); // 매치 전 일반 텍스트
             }
 
-            const userId = match[1];
+            const userId = match[2];
+            console.log(match);
             elements.push(
                 <a
                     key={match.index}
                     href={`#`}    
                     style={{ color:'white',backgroundColor: 'slateblue', textDecoration: 'none' }}
                 >
-                    @{userId}
+                    {match[1]}{userId}
                 </a>
             );
 
