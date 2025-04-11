@@ -24,7 +24,7 @@ public class OnlineHandler {
 
 	ConcurrentHashMap<String, Long> lo;
 	
-	ConcurrentHashMap<Long,OnlineDTO> map;
+	ConcurrentHashMap<Long, ConcurrentHashMap<String, OnlineDTO>> map;
 	
 	
 	public OnlineHandler() {
@@ -38,11 +38,22 @@ public class OnlineHandler {
 	@Autowired
 	FriendRepo friend;
 	
+	/**
+	 * 다클라 판단하기.
+	 * 현재 구조 온라인 -> map에 새 유저 추가 -> event 일으킨 유저 map에서 가져옴 ->
+	 * 
+	 */
+	
 	public void SetOnline(String user, WebSocketSession s) throws IOException {
 		Long l = Long.parseLong(user);
 		OnlineDTO dto = new OnlineDTO(l,s);
 		lo.put(s.getId(), l);
-		map.put(l, dto);
+		
+		map.putIfAbsent(l, new ConcurrentHashMap<String, OnlineDTO>());
+		
+		map.get(l).put(s.getId(), dto);
+		
+		
 		List<Friend> f = friend.findFriendsBySub(l);
 		System.out.println(s.getId());
 		OnlineEventDTO aa =new OnlineEventDTO();
@@ -51,7 +62,7 @@ public class OnlineHandler {
 		aa.setType("FRIENDINOUT");
         String jsonMessage = mapper.writeValueAsString(aa);
 
-		OnlineDTO eventer = map.get(lo.get(s.getId()));
+		OnlineDTO eventer = map.get(lo.get(s.getId())).get(s.getId());
         
 		OnlineEventDTO aain =new OnlineEventDTO();
 		aain.setIn(true);
@@ -59,34 +70,30 @@ public class OnlineHandler {
         
         
 		for (Friend fr : f) {
-			if(map.get(fr.getUserA()) != null && map.get(fr.getUserB()) != null){
-				if(map.get(fr.getUserA()) != null && map.get(fr.getUserB()) != null){
-					OnlineDTO user1 = map.get(fr.getUserA());
-					OnlineDTO user2 = map.get(fr.getUserB());
-					
-					if(user1.getS().isOpen() && user2.getS().isOpen()) {
-					if(user1.getSub() == eventer.getSub()) {
-						aain.setId(user2.getSub());
-				        String jsonMessagein = mapper.writeValueAsString(aain);
-						user2.getS().sendMessage(new TextMessage(jsonMessage));
-						eventer.getS().sendMessage(new TextMessage(jsonMessagein));
+					ConcurrentHashMap<String, OnlineDTO> temp;
+
+					if(fr.getUserA() == eventer.getSub()) {
+						temp = map.get(fr.getUserB());
+						aain.setId(fr.getUserB());
 					}
 					else {
-						aain.setId(user1.getSub());
+						temp = map.get(fr.getUserA());
+						aain.setId(fr.getUserA());
+					}
+					for(OnlineDTO onf : temp.values()) {
+						onf.getS().sendMessage(new TextMessage(jsonMessage));
+					}
+					
 				        String jsonMessagein = mapper.writeValueAsString(aain);
-						user1.getS().sendMessage(new TextMessage(jsonMessage));
 						eventer.getS().sendMessage(new TextMessage(jsonMessagein));
-					}
+
 					}
 
-				}
-
-			}
 			
 		}
 		 
 		
-	}
+
 	/**
 	 * 					map.get(fr.getId()).getS().sendMessage(new TextMessage(lo.get(s.getId()) + "로그아웃 했음."));
 
@@ -102,33 +109,36 @@ public class OnlineHandler {
 	public void SetOffline(String user, WebSocketSession s) throws IOException {
 		List<Friend> f = friend.findFriendsBySub(lo.get(s.getId()));
 
-		OnlineDTO eventer = map.get(lo.get(s.getId()));
+		OnlineDTO eventer = map.get(lo.get(s.getId())).get(s.getId());
 		OnlineEventDTO aa =new OnlineEventDTO();
 		aa.setId(eventer.getSub());
 		aa.setIn(false);
 		aa.setType("FRIENDINOUT");
+		boolean isempty = false;
+		map.get(eventer.getSub()).remove(s.getId());
+		if(map.get(eventer.getSub()).isEmpty()) {
+			lo.remove(s.getId());
+			isempty = true;
+		}
         String jsonMessage = mapper.writeValueAsString(aa);
-
 		for (Friend fr : f) {
-			if(map.get(fr.getUserA()) != null && map.get(fr.getUserB()) != null){
-				OnlineDTO user1 = map.get(fr.getUserA());
-				OnlineDTO user2 = map.get(fr.getUserB());
-				if(user1.getS().isOpen() && user2.getS().isOpen()) {
-					if(user1.getSub() == eventer.getSub()) {
-						user2.getS().sendMessage(new TextMessage(jsonMessage));
-						
-					}
-					else {
-						user1.getS().sendMessage(new TextMessage(jsonMessage));
-					}
-				}
+			ConcurrentHashMap<String, OnlineDTO> temp;
 
+			if(fr.getUserA() == eventer.getSub()) {
+				temp = map.get(fr.getUserB());
+				aa.setId(fr.getUserB());
+			}
+			else {
+				temp = map.get(fr.getUserA());
+				aa.setId(fr.getUserA());
+			}
+			if(isempty) {
+				for(OnlineDTO onf : temp.values()) {
+					onf.getS().sendMessage(new TextMessage(jsonMessage));
+				}
 			}
 		}
-		
 
-		map.remove(lo.get(s.getId()));
-		lo.remove(s.getId());
 		
 		System.out.println(map.size() + "zzzz");
 		
