@@ -23,6 +23,7 @@ import com.scoop.bak.Repository.ChatroomRepo;
 import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.MemberRepo;
 import com.scoop.bak.Repository.MessageRepo;
+import com.scoop.bak.Repository.ServerRepo;
 import com.scoop.bak.Repository.UserRepo;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
@@ -32,6 +33,7 @@ import com.scoop.bak.classes.chat.Chatroom_DM;
 import com.scoop.bak.classes.chat.Chatroom_DM_DTO;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
+import com.scoop.bak.classes.server.Server;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.FriendDTO;
 import com.scoop.bak.classes.user.SignupRequest;
@@ -51,6 +53,10 @@ public class Service implements UserDetailsService{
  private UserRepo repo_user;
  private MessageRepo repo_mes;
  private ChatroomRepo repo_cha;
+ 
+ @Autowired
+ private ServerRepo repo_serv;
+ 
  private final StringRedisTemplate redis; // ✅ Redis 추가
  @Autowired
  private ChatroomDMRepo repo_cha_dm;
@@ -380,6 +386,9 @@ public List<Chatroom_DM_DTO> findDmListBySub(Long sub) {
 	return result;
 }
 
+public List<Server> getServers(String id){
+	return repo_serv.findAll();
+}
 
 public String addChatrooms(String server, String name) {
 	Chatroom chat = new Chatroom();
@@ -390,6 +399,13 @@ public String addChatrooms(String server, String name) {
 	chat.setType(0);
 	repo_cha.save(chat);
 	return 	Long.toString(repo_cha.count());
-
+}
+public String addChatServer(String name) {
+	Server serv = new Server(); 
+	serv.setServerName(name);
+	repo_serv.save(serv);
+	
+	return Long.toString(repo_serv.count());
+	
 }
 }

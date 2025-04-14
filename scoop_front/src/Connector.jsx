@@ -10,6 +10,7 @@
         const nav = useNavigate();
         const [messageQueue, setMessageQueue] = useState({});
         const [serverQueue, setServerQueue] = useState({});
+        const [roomQueue, setRoomQueue] = useState([]);
         const [accessToken, setAccessToken] = useState({});    
         const [wsConnected, setWsConnected] = useState(false);
         const [subChannel, setSubChannel] = useState({});
@@ -36,6 +37,9 @@
         useEffect(()=>{
             console.log(messageQueue);
         },[messageQueue])
+        useEffect(()=>{
+            console.log(roomQueue);
+        },[roomQueue])
         useEffect( () => {
             console.log(subChannel);
         },[subChannel])
@@ -46,6 +50,27 @@
             }
         }, [accessToken])
 
+        //서버
+        function getServerByUser(id){
+            if(socRef.current){
+                axios(`https://${REST}/api/getServers`, {
+                    method : "post",
+                    params : {
+                        id: id,
+                    },
+                    withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
+                }).then((res) => { 
+                        console.log(res);
+                        setRoomQueue(res.data
+                        );
+                        return;
+                }).catch((err) => { 
+                        console.log(err);
+                        return;
+                });
+            }
+            return;
+        }
         const ConnectWs = () => {
             console.log(accessToken + "토큰");
             console.log(JSON.stringify(accessToken));
@@ -58,6 +83,7 @@
                 console.log(accessToken);
                 console.log(socRef.current.readyState);
                 setWsConnected(true);
+                getServerByUser(1);
                 socRef.current.send(JSON.stringify({
                     "type" : "ENTER_APP",
                     "writer" : accessToken.sub, // accessToken의 변수가 들어갈 자리
@@ -321,7 +347,7 @@
             return
          };
         return (
-            <Context.Provider value={{sendMessage,getServerByChannel,serverQueue,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected,accessToken,onLineFriend}}>
+            <Context.Provider value={{sendMessage,getServerByChannel,serverQueue,sendRegister,Sub,unSub,setReceived,messageQueue,wsConnected,accessToken,onLineFriend, getServerByUser,roomQueue}}>
                     {children}
             </Context.Provider>
         )

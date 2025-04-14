@@ -71,7 +71,7 @@ public class OnlineHandler {
         
 		for (Friend fr : f) {
 					ConcurrentHashMap<String, OnlineDTO> temp;
-
+				
 					if(fr.getUserA() == eventer.getSub()) {
 						temp = map.get(fr.getUserB());
 						aain.setId(fr.getUserB());
@@ -80,14 +80,19 @@ public class OnlineHandler {
 						temp = map.get(fr.getUserA());
 						aain.setId(fr.getUserA());
 					}
-					for(OnlineDTO onf : temp.values()) {
-						onf.getS().sendMessage(new TextMessage(jsonMessage));
+					if(temp == null) {
+						
 					}
-					
+					else {
+						for(OnlineDTO onf : temp.values()) {
+							onf.getS().sendMessage(new TextMessage(jsonMessage));
+						}
 				        String jsonMessagein = mapper.writeValueAsString(aain);
 						eventer.getS().sendMessage(new TextMessage(jsonMessagein));
-
 					}
+						
+					}
+					
 
 			
 		}
@@ -133,8 +138,13 @@ public class OnlineHandler {
 				aa.setId(fr.getUserA());
 			}
 			if(isempty) {
-				for(OnlineDTO onf : temp.values()) {
-					onf.getS().sendMessage(new TextMessage(jsonMessage));
+				if(temp == null) {
+				
+				}
+				else {
+					for(OnlineDTO onf : temp.values()) {
+						onf.getS().sendMessage(new TextMessage(jsonMessage));
+					}
 				}
 			}
 		}

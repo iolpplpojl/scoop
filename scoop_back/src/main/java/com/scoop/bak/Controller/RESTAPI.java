@@ -21,6 +21,8 @@ import com.scoop.bak.classes.chat.ChatroomDTO;
 import com.scoop.bak.classes.chat.Chatroom_DM_DTO;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
+import com.scoop.bak.classes.server.Server;
+import com.scoop.bak.classes.server.ServerDTO;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.FriendDTO;
 import com.scoop.bak.classes.user.SignupRequest;
@@ -339,6 +341,19 @@ public class RESTAPI {
 	public ResponseEntity<?> addChatroom(@RequestParam("server_id") String serverid, @RequestParam("name") String name)
 	{
 		String num = serv.addChatrooms(serverid,name);
+		return ResponseEntity.ok().body(num);
+	}	
+	
+	
+	@PostMapping("/getServers")
+	public List<Server> getServers(@RequestParam("id") String name){
+		return serv.getServers(name);
+	}
+	
+	@PostMapping("/addServer")
+	public ResponseEntity<?> addServer( @RequestParam("name") String name)
+	{
+		String num = serv.addChatServer(name);
 		return ResponseEntity.ok().body(num);
 	}	
 }
