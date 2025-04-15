@@ -1,1 +1,8 @@
 /.metadata/
+
+node_modules/
+
+.vite/
+*.pack
+*.json
+.eslintcache
