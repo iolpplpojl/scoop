@@ -392,6 +392,7 @@ public List<Chatroom_DM_DTO> findDmListBySub(Long sub) {
 }
 
 public List<Server> getServers(String id){
+	System.out.println(id + " zz");
 	System.out.println(repo_serv.findAllByUserId(Long.parseLong(id)));
 	return repo_serv.findAllByUserId(Long.parseLong(id));
 }
