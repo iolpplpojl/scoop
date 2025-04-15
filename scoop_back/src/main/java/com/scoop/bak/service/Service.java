@@ -23,7 +23,9 @@ import com.scoop.bak.Repository.ChatroomRepo;
 import com.scoop.bak.Repository.FriendRepo;
 import com.scoop.bak.Repository.MemberRepo;
 import com.scoop.bak.Repository.MessageRepo;
+import com.scoop.bak.Repository.ServerMemberRepo;
 import com.scoop.bak.Repository.ServerRepo;
+import com.scoop.bak.Repository.ServerRoleRepo;
 import com.scoop.bak.Repository.UserRepo;
 import com.scoop.bak.classes.MemberRes;
 import com.scoop.bak.classes.MemberResDetails;
@@ -34,6 +36,7 @@ import com.scoop.bak.classes.chat.Chatroom_DM_DTO;
 import com.scoop.bak.classes.chat.Message;
 import com.scoop.bak.classes.chat.MessageDTO;
 import com.scoop.bak.classes.server.Server;
+import com.scoop.bak.classes.server.Server_Member;
 import com.scoop.bak.classes.user.Friend;
 import com.scoop.bak.classes.user.FriendDTO;
 import com.scoop.bak.classes.user.SignupRequest;
@@ -58,9 +61,11 @@ public class Service implements UserDetailsService{
  private ServerRepo repo_serv;
  
  private final StringRedisTemplate redis; // ✅ Redis 추가
+ 
  @Autowired
  private ChatroomDMRepo repo_cha_dm;
- 
+ @Autowired
+ private ServerMemberRepo repo_serv_mem;
  @Autowired
  private FriendRepo repo_friend;
  
@@ -387,7 +392,8 @@ public List<Chatroom_DM_DTO> findDmListBySub(Long sub) {
 }
 
 public List<Server> getServers(String id){
-	return repo_serv.findAll();
+	System.out.println(repo_serv.findAllByUserId(Long.parseLong(id)));
+	return repo_serv.findAllByUserId(Long.parseLong(id));
 }
 
 public String addChatrooms(String server, String name) {
@@ -400,11 +406,19 @@ public String addChatrooms(String server, String name) {
 	repo_cha.save(chat);
 	return 	Long.toString(repo_cha.count());
 }
-public String addChatServer(String name) {
+public String addChatServer(String name,String user) {
 	Server serv = new Server(); 
 	serv.setServerName(name);
 	repo_serv.save(serv);
 	
+
+	System.out.println(repo_serv.count());
+	
+	
+	Server_Member sm = new Server_Member(repo_serv.count(), Long.parseLong(user), null);
+	
+	
+	repo_serv_mem.save(sm);
 	return Long.toString(repo_serv.count());
 	
 }

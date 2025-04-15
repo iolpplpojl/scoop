@@ -351,9 +351,9 @@ public class RESTAPI {
 	}
 	
 	@PostMapping("/addServer")
-	public ResponseEntity<?> addServer( @RequestParam("name") String name)
+	public ResponseEntity<?> addServer( @RequestParam("name") String name,@RequestParam("id") String id)
 	{
-		String num = serv.addChatServer(name);
+		String num = serv.addChatServer(name,id);
 		return ResponseEntity.ok().body(num);
 	}	
 }

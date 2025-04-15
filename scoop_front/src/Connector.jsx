@@ -56,7 +56,7 @@
                 axios(`https://${REST}/api/getServers`, {
                     method : "post",
                     params : {
-                        id: id,
+                        id: `${id}`,
                     },
                     withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
                 }).then((res) => { 

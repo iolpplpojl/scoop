@@ -11,7 +11,7 @@ export function ServerContainer() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isServerSelected,setIsServerSeleceted] = useState(false);
     const {server} = useParams();
-    const {getServerByChannel,serverQueue,wsConnected,getServerByUser,roomQueue} = useContext(Context);
+    const {getServerByChannel,serverQueue,wsConnected,getServerByUser,roomQueue,accessToken} = useContext(Context);
     const [seed, setSeed] = useState("");
     const nav = useNavigate();
 
@@ -43,7 +43,7 @@ export function ServerContainer() {
                 roomQueue.map(element => (
                   <Server server={element.serverID}></Server>
                 )) : null}
-                <AddServer reset={getServerByUser}></AddServer>
+                <AddServer reset={getServerByUser} token={accessToken}></AddServer>
             </ul>
         </div>
       </div>

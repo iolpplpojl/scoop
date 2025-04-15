@@ -8,6 +8,7 @@ export function AddServer(props){
 
     const [open,setOpen] = useState(false);
     const [name,setName] = useState("");
+    
     const location = useLocation();
     const pathSegments = location.pathname.split('/'); // 현재 경로를 분할
     function handle(){
@@ -19,7 +20,8 @@ export function AddServer(props){
         axios(`https://${REST}/api/addServer`, {
                 method : "post",
                 params : {
-                    name: name
+                    name: name,
+                    id: props.token.sub
                 },
                 withCredentials: true  // 쿠키 및 인증 헤더를 포함하여 요청
             }).then((res) => { 
