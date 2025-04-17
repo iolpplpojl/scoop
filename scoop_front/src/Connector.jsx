@@ -23,7 +23,7 @@
         const loc = useLocation();
         // /login이 아닐때 페이지 이동마다 로그인 검증
         useEffect(()=>{
-            if(!(loc.pathname =="/login" || loc.pathname == "/register" || loc.pathname == "/find-password")){
+            if(!(loc.pathname =="/login" || loc.pathname == "/register" || loc.pathname == "/find-password" || loc.pathname.startsWith("/reset-password"))){
                 verifyLogin();
                 console.log("navigating..." + Math.random() + loc.pathname);
             }
