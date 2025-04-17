@@ -83,7 +83,8 @@
                 console.log(accessToken);
                 console.log(socRef.current.readyState);
                 setWsConnected(true);
-                getServerByUser(1);
+                getServerByUser(accessToken.sub);
+
                 socRef.current.send(JSON.stringify({
                     "type" : "ENTER_APP",
                     "writer" : accessToken.sub, // accessToken의 변수가 들어갈 자리
