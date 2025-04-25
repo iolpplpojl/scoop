@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import './home.css';
 
 function Home() {
   useEffect(() => {
@@ -16,73 +17,68 @@ function Home() {
   }, []); // The empty array ensures this runs only once when the component mounts
 
   return (
-    <div>
-      {/* Header Section */}
-      <header>
+    <div className="home-container">
+    
+      <header className="header-content">
         <nav className="navbar">
           <div className="navbar_logo">
             <i className="fa-brands fa-discord"></i> {/* Discord Icon */}
-            <a href="/home">Discord</a>
+            <a href="/home" className="navbar-logo-link">Discord</a>
           </div>
-
-          <ul className="navbar_menu">
-            {/* Add menu items here if needed */}
-          </ul>
-
-          <ul className="navbar_icon">
-            <a href="/login">
+  
+          <div className="navbar_icon">
+            <a href="/login" className="login-link">
               <button className="login-button">Login</button>
             </a>
-          </ul>
+          </div>
         </nav>
       </header>
-
-      {/* Main Content Section */}
-      <div className="container">
-        <main className="main">
-          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+  
+      
+      <div className="mainsidebar">
+        <main className="main-content">
+          <div className="welcome-message">
             <h1>Welcome to my website!!!</h1>
           </div>
-
-          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+  
+          <div className="logo-section">
             <img
               src="https://i0.wp.com/designcompass.org/wp-content/uploads/2025/02/logo-discord.png?fit=768%2C576&ssl=1"
               alt="Discord Logo"
-              style={{ maxWidth: '360px', height: '200px' }}
+              className="discord-logo"
             />
           </div>
-
-          <div style={{ textAlign: 'center' }}>
-            <a href="/">
-              <button className="start-button" style={{ padding: '10px 20px', fontSize: '16px' }}>
-                시작하기
-              </button>
+  
+          <div className="start-button-wrapper">
+            <a href="/" className="start-link">
+              <button className="start-button">시작하기</button>
             </a>
           </div>
         </main>
-
+  
         {/* Sidebar Section */}
         <aside className="sidebar">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="sidebar-content">
             <img
               src="https://support.discord.com/hc/article_attachments/360060867451"
-              style={{ maxWidth: '430px', height: '320px', marginLeft: '80px' }}
+              className="sidebar-image"
               alt="Discord Features"
             />
-            <p style={{ marginLeft: '25px' }}>
+            <p className="sidebar-text">
               Discord's advantages lie not only in its ability to facilitate communication through servers and
               channels, but also in its collaboration features, making it highly useful for teamwork and project
               management.
             </p>
-          </div>
-          <h3>"Hurry up and start"</h3>
+            </div>
+          <h3 className="sidebar-quote">"Hurry up and start"</h3>
+        
         </aside>
       </div>
-
+  
       {/* Footer Section */}
-      <footer>
-        <div className="footer-links">
-          <a href="/home">홈</a>
+      <footer className="footer">
+        <div className="footer-content">
+          <a href="/home" className="footer-link">홈</a>
         </div>
         <p className="footer-text">© 2025 회사명. 모든 권리 보유.</p>
       </footer>
