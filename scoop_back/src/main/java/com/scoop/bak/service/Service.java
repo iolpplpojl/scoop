@@ -64,8 +64,10 @@ public class Service implements UserDetailsService{
  
  @Autowired
  private ChatroomDMRepo repo_cha_dm;
+ 
  @Autowired
  private ServerMemberRepo repo_serv_mem;
+ 
  @Autowired
  private FriendRepo repo_friend;
  
@@ -93,6 +95,7 @@ public String DM_isExist(String start, String to) {
 		System.out.println("이미 있삼.");
 		return dm.getChatroomID().toString();
 	}
+	
 	Chatroom c = new Chatroom();
 	c.setType(1);
 	c.setPublic(true);

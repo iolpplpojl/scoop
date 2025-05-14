@@ -64,6 +64,8 @@ public class RESTAPI {
 	@PostMapping("/dm")
 	public ResponseEntity<?> dm(@RequestParam("id") String idenId, @RequestParam("to") String to)
 	{
+		System.out.println("내아이디" + idenId);
+		System.out.println("상대 아이디" + to);
 		String num = serv.DM_isExist(idenId, to);
 		return ResponseEntity.ok().body(num);
 	}

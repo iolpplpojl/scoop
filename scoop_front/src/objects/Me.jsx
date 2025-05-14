@@ -8,8 +8,18 @@ const Me = () => {
   return (
     <>
       <div className="scroll">
-        <button onClick={() => setActiveComponent("friends")}>친구</button>
-        <button onClick={() => setActiveComponent("other1")}>다른 기능1</button>
+        <button
+          className={`tab-btn ${activeComponent === "friends" ? "active" : ""}`}
+          onClick={() => setActiveComponent("friends")}
+        >
+          친구
+        </button>
+        <button
+          className={`tab-btn ${activeComponent === "other1" ? "active" : ""}`}
+          onClick={() => setActiveComponent("other1")}
+        >
+          내 DM 목록
+        </button>
       </div>
 
       {activeComponent === "friends" && <FriendButtonContainer />}

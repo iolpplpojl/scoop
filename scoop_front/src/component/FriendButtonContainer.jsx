@@ -10,10 +10,17 @@ const FriendButtonContainer = () => {
     <div>
       {/* 탭 버튼 */}
       <div>
-        <button onClick={() => setActiveTab("friends")}>친구 목록</button>
-        <button onClick={() => setActiveTab("add")}>친구 추가</button>
-        <button onClick={() => setActiveTab("requests")}>요청 목록</button>
+        <button className="tab-btn" onClick={() => setActiveTab("friends")}>
+          친구 목록
+        </button>
+        <button className="tab-btn" onClick={() => setActiveTab("add")}>
+          친구 추가
+        </button>
+        <button className="tab-btn" onClick={() => setActiveTab("requests")}>
+          요청 목록
+        </button>
       </div>
+
 
       {/* 선택된 탭에 따라 렌더링 */}
       <div>

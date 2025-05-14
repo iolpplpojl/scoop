@@ -86,14 +86,22 @@ export function FriendsContainer() {
 
       {friendsData !== null && (
         friendsData.length > 0 ? (
-          <ul>
+          <ul className="friend-list">
             {friendsData.map((friend, index) => (
-              <li key={index}>
-                <strong>식별코드:</strong> {friend.identifyCode} | 
-                <strong>아이디:</strong> {friend.identifyCode} | 
-                <strong>닉네임:</strong> {friend.nickname}
-                {onLineFriend.includes(friend.identifyCode)? "접속중!" : null}
-                <button onClick={()=> {handleChat(friend.identifyCode)}}>채팅</button>
+              <li className="friend-item" key={index}>
+                <div className="friend-info">
+                  <strong>아이디:</strong> {friend.identifyCode} <br></br>
+                  <strong>닉네임:</strong> {friend.nickname} 
+                  {onLineFriend.includes(friend.identifyCode) && (
+                    <span className="online-tag">접속중!</span>
+                  )}
+                </div>
+                <button
+                  className="tab-btn"
+                  onClick={() => handleChat(friend.identifyCode)}
+                >
+                  채팅
+                </button>
               </li>
             ))}
           </ul>
@@ -102,6 +110,7 @@ export function FriendsContainer() {
         )
       )}
     </div>
+
   );
 }
 
