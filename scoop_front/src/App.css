@@ -85,4 +85,69 @@
   font-weight: bold;
 }
 
+.add-friend-container {
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  color: white;
+  text-align: center;
+
+}
+
+.friend-input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 16px;
+  background-color: #414a59;
+  color: white;
+}
+
+.friend-input::placeholder {
+  color: #aaa;
+}
+
+.error-msg {
+  color: #ff6b6b;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.btn-group {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #888;
+  color: white;
+}
+
+.confirm-btn {
+  background-color: #586275;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #777;
+}
+
+.confirm-btn:hover {
+  background-color: #3e4451;
+}
+
 

@@ -64,18 +64,20 @@ const AddFriend = ({ onClose, initialFriendCode }) => {
   };
 
   return (
-    <div>
+    <div className="add-friend-container">
       <h2>친구의 이메일을 입력하세요.</h2>
       <input
         type="text"
+        className="friend-input"
         value={friendCode}
         onChange={handleChange}
         placeholder="친구 이메일"
       />
-      {error && <p>{error}</p>}
-      <div>
-        <button onClick={onClose}>취소</button>
-        <button onClick={() => handleSubmit()}>확인</button>
+      {error && <p className="error-msg">{error}</p>}
+
+      <div className="btn-group">
+        <button className="cancel-btn" onClick={onClose}>취소</button>
+        <button className="confirm-btn" onClick={handleSubmit}>확인</button>
       </div>
     </div>
   );
