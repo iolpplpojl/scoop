@@ -1,6 +1,66 @@
-
-.AddChannel{
+.AddChannel {
+    background-color: #2b2d31;
+    color: #ffffff;
+    padding: 2rem;
+    width: 350px;
+    border-radius: 12px;
+   
+    font-family: "Segoe UI", "Noto Sans KR", sans-serif;
     display: flex;
     flex-direction: column;
-
-}
+    gap: 1.2rem;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  /* 애니메이션 효과 */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* 입력 박스 */
+  .AddChannel input {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: #1e1f22;
+    color: #dbdee1;
+    border: 1px solid #4e5058;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  .AddChannel input:focus {
+    border-color: #5865f2;
+  }
+  
+  /* 버튼 */
+  .AddChannel button {
+    width: 100%;
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .AddChannel button:disabled {
+    background-color: #4e5058;
+    cursor: not-allowed;
+  }
+  
+  .AddChannel button:hover:not(:disabled) {
+    background-color: #4752c4;
+  }
+  

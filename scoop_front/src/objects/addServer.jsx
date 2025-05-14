@@ -54,6 +54,7 @@ export function AddServer(props){
 
                             <div>
                                 <button onClick={make}>만들기</button>
+                                <button onClick={() => setOpen(false)} style={{ marginLeft: "10px" }}>취소</button>
                             </div>
                         </div>
                     </div> : null}

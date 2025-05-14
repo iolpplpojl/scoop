@@ -1,23 +1,115 @@
-#add {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+/* 전체 서버 버튼 */
+.serverpop {
+    list-style: none;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .serverpop img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: #2b2d31;
+    transition: all 0.2s ease-in-out;
+    
+  }
+  
+  .serverpop img:hover {
+    box-shadow: 0 0 0 2px #5865f2; /* 디스코드 보라색 강조 */
+    transform: scale(1.05);
+    outline: none;
+    border: none;
+
+  }
+  
+  
+  /* 팝업 오버레이 */
+  #add {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30, 31, 34, 0.85); /* 어두운 반투명 */
+    display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vw; /* 원하는 크기로 조절 */
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.55);
-}
-
-#addPanel{
+    z-index: 999;
+  }
+  
+  /* 팝업 패널 */
+  #addPanel {
+    background-color: #2b2d31;
+    color: #ffffff;
+    padding: 2rem;
+    width: 350px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    font-family: "Segoe UI", "Noto Sans KR", sans-serif;
+    text-align: center;
+    animation: slideUp 0.3s ease;
+  }
+  
+  /* 등장 애니메이션 */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* 제목 */
+  #addPanel h1 {
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+    color: #f2f3f5;
+  }
+  
+  /* 입력 필드 */
+  #addPanel input {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: #1e1f22;
+    color: #dbdee1;
+    border: 1px solid #4e5058;
+    border-radius: 6px;
+    margin-top: 0.4rem;
+    margin-bottom: 1.4rem;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  #addPanel input:focus {
+    border-color: #5865f2;
+  }
+  
+  /* 버튼 */
+  #addPanel button {
+    background-color: #5865f2;
     color: white;
-    min-width: 24vw;
-    background-color: rgb(13, 38, 97);
-}
-
-#addPanel div{
-    margin-top: 2rem;
-}
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 0 0.2rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  #addPanel button:nth-child(2) {
+    background-color: #4e5058;
+  }
+  
+  #addPanel button:nth-child(2):hover {
+    background-color: #3c3e44;
+  }
+  
